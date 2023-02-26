@@ -7,6 +7,7 @@ part of 'form_factor.dart';
 // **************************************************************************
 
 extension FormFactorPatternMatch on FormFactor {
+  String get value => ['plastic', 'virtual'][index];
   T when<T>({
     required T Function() plastic,
     required T Function() virtual,

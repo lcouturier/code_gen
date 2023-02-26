@@ -7,6 +7,12 @@ part of 'purpose.dart';
 // **************************************************************************
 
 extension PurposePatternMatch on Purpose {
+  String get value => [
+        'loadTransaction',
+        'successfulTransaction',
+        'declinedTransaction',
+        'marketingCommunication'
+      ][index];
   T when<T>({
     required T Function() loadTransaction,
     required T Function() successfulTransaction,

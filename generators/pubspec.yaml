@@ -15,6 +15,7 @@ dependencies:
   source_gen:
   annotations:
     path: ../annotations/
+  darq: ^1.2.1
 
 dev_dependencies:
   flutter_test:

@@ -7,6 +7,17 @@ part of 'card_status.dart';
 // **************************************************************************
 
 extension CardStatusPatternMatch on CardStatus {
+  String get value => [
+        'active',
+        'issued',
+        'blocked',
+        'lost',
+        'damaged',
+        'cancelled',
+        'stolen',
+        'pending',
+        'expired'
+      ][index];
   T when<T>({
     required T Function() active,
     required T Function() issued,

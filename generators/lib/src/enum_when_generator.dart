@@ -15,6 +15,10 @@ class EnumWhenGenerator extends GeneratorForAnnotation<EnumWhenAnnotation> {
     final buffer = StringBuffer();
     buffer.writeln('extension ${visitor.className}PatternMatch on ${visitor.className} {');
 
+    final values = visitor.fields.entries.map((e) => '\'${e.key}\'').toList().join(',');
+
+    buffer.writeln("String get value => [$values][index];");
+
     buffer.writeln('T when<T>({');
     for (var f in visitor.fields.entries.map((e) => e.key)) {
       buffer.writeln('  required T Function() $f,');
