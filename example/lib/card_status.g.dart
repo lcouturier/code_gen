@@ -7,17 +7,31 @@ part of 'card_status.dart';
 // **************************************************************************
 
 extension CardStatusPatternMatch on CardStatus {
-  String get value => [
-        'active',
-        'issued',
-        'blocked',
-        'lost',
-        'damaged',
-        'cancelled',
-        'stolen',
-        'pending',
-        'expired'
-      ][index];
+  T map<T>({
+    required T Function(CardStatus active) active,
+    required T Function(CardStatus issued) issued,
+    required T Function(CardStatus blocked) blocked,
+    required T Function(CardStatus lost) lost,
+    required T Function(CardStatus damaged) damaged,
+    required T Function(CardStatus cancelled) cancelled,
+    required T Function(CardStatus stolen) stolen,
+    required T Function(CardStatus pending) pending,
+    required T Function(CardStatus expired) expired,
+  }) {
+    final items = {
+      CardStatus.active: active,
+      CardStatus.issued: issued,
+      CardStatus.blocked: blocked,
+      CardStatus.lost: lost,
+      CardStatus.damaged: damaged,
+      CardStatus.cancelled: cancelled,
+      CardStatus.stolen: stolen,
+      CardStatus.pending: pending,
+      CardStatus.expired: expired,
+    };
+    return items[this]!(this);
+  } // _map
+
   T when<T>({
     required T Function() active,
     required T Function() issued,
@@ -41,9 +55,36 @@ extension CardStatusPatternMatch on CardStatus {
       CardStatus.expired: expired,
     };
     return items[this]!();
-  }
+  } // _when
 
-  T whenOrElse<T>({
+  T mayBeMap<T>({
+    T Function(CardStatus active)? active,
+    T Function(CardStatus issued)? issued,
+    T Function(CardStatus blocked)? blocked,
+    T Function(CardStatus lost)? lost,
+    T Function(CardStatus damaged)? damaged,
+    T Function(CardStatus cancelled)? cancelled,
+    T Function(CardStatus stolen)? stolen,
+    T Function(CardStatus pending)? pending,
+    T Function(CardStatus expired)? expired,
+    required T Function() orElse,
+  }) {
+    final items = {
+      CardStatus.active: active,
+      CardStatus.issued: issued,
+      CardStatus.blocked: blocked,
+      CardStatus.lost: lost,
+      CardStatus.damaged: damaged,
+      CardStatus.cancelled: cancelled,
+      CardStatus.stolen: stolen,
+      CardStatus.pending: pending,
+      CardStatus.expired: expired,
+    };
+    final f = items[this];
+    return (f != null) ? f(this) : orElse();
+  } // _mayBeMap
+
+  T mayBeWhen<T>({
     T Function()? active,
     T Function()? issued,
     T Function()? blocked,
@@ -68,5 +109,5 @@ extension CardStatusPatternMatch on CardStatus {
     };
     final f = items[this];
     return (f != null) ? f() : orElse();
-  }
-}
+  } // _mayBeWhen
+} // CardStatusPatternMatch

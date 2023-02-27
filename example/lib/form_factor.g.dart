@@ -7,7 +7,17 @@ part of 'form_factor.dart';
 // **************************************************************************
 
 extension FormFactorPatternMatch on FormFactor {
-  String get value => ['plastic', 'virtual'][index];
+  T map<T>({
+    required T Function(FormFactor plastic) plastic,
+    required T Function(FormFactor virtual) virtual,
+  }) {
+    final items = {
+      FormFactor.plastic: plastic,
+      FormFactor.virtual: virtual,
+    };
+    return items[this]!(this);
+  } // _map
+
   T when<T>({
     required T Function() plastic,
     required T Function() virtual,
@@ -17,9 +27,22 @@ extension FormFactorPatternMatch on FormFactor {
       FormFactor.virtual: virtual,
     };
     return items[this]!();
-  }
+  } // _when
 
-  T whenOrElse<T>({
+  T mayBeMap<T>({
+    T Function(FormFactor plastic)? plastic,
+    T Function(FormFactor virtual)? virtual,
+    required T Function() orElse,
+  }) {
+    final items = {
+      FormFactor.plastic: plastic,
+      FormFactor.virtual: virtual,
+    };
+    final f = items[this];
+    return (f != null) ? f(this) : orElse();
+  } // _mayBeMap
+
+  T mayBeWhen<T>({
     T Function()? plastic,
     T Function()? virtual,
     required T Function() orElse,
@@ -30,5 +53,5 @@ extension FormFactorPatternMatch on FormFactor {
     };
     final f = items[this];
     return (f != null) ? f() : orElse();
-  }
-}
+  } // _mayBeWhen
+} // FormFactorPatternMatch

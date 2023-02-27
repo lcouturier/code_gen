@@ -15,10 +15,31 @@ class EnumWhenGenerator extends GeneratorForAnnotation<EnumWhenAnnotation> {
     final buffer = StringBuffer();
     buffer.writeln('extension ${visitor.className}PatternMatch on ${visitor.className} {');
 
-    final values = visitor.fields.entries.map((e) => '\'${e.key}\'').toList().join(',');
+    _map(buffer, visitor);
+    _when(buffer, visitor);
+    _mayBeMap(buffer, visitor);
+    _mayBeWhen(buffer, visitor);
 
-    buffer.writeln("String get value => [$values][index];");
+    buffer.writeln('} // ${visitor.className}PatternMatch');
+    return buffer.toString();
+  }
 
+  void _map(StringBuffer buffer, EnumVisitor visitor) {
+    buffer.writeln('T map<T>({');
+    for (var f in visitor.fields.entries.map((e) => e.key)) {
+      buffer.writeln('required T Function(${visitor.className} $f) $f,');
+    }
+    buffer.writeln('}) {');
+    buffer.writeln('     final items = {');
+    for (var f in visitor.fields.entries.map((e) => e.key)) {
+      buffer.writeln('${visitor.className}.$f  : $f,');
+    }
+    buffer.writeln('     };');
+    buffer.writeln('     return items[this]!(this);');
+    buffer.writeln('   } // _map');
+  }
+
+  void _when(StringBuffer buffer, EnumVisitor visitor) {
     buffer.writeln('T when<T>({');
     for (var f in visitor.fields.entries.map((e) => e.key)) {
       buffer.writeln('  required T Function() $f,');
@@ -30,9 +51,11 @@ class EnumWhenGenerator extends GeneratorForAnnotation<EnumWhenAnnotation> {
     }
     buffer.writeln('     };');
     buffer.writeln('     return items[this]!();');
-    buffer.writeln('   }');
+    buffer.writeln('   } // _when');
+  }
 
-    buffer.writeln('T whenOrElse<T>({');
+  void _mayBeWhen(StringBuffer buffer, EnumVisitor visitor) {
+    buffer.writeln('T mayBeWhen<T>({');
     for (var f in visitor.fields.entries.map((e) => e.key)) {
       buffer.writeln('  T Function()? $f,');
     }
@@ -45,8 +68,23 @@ class EnumWhenGenerator extends GeneratorForAnnotation<EnumWhenAnnotation> {
     buffer.writeln('     };');
     buffer.writeln('     final f = items[this];');
     buffer.writeln('     return (f != null) ? f() : orElse();');
-    buffer.writeln('  }');
-    buffer.writeln('}');
-    return buffer.toString();
+    buffer.writeln('  } // _mayBeWhen');
+  }
+
+  void _mayBeMap(StringBuffer buffer, EnumVisitor visitor) {
+    buffer.writeln('T mayBeMap<T>({');
+    for (var f in visitor.fields.entries.map((e) => e.key)) {
+      buffer.writeln('  T Function(${visitor.className} $f)? $f,');
+    }
+    buffer.writeln('  required T Function() orElse,');
+    buffer.writeln('}) {');
+    buffer.writeln('     final items = {');
+    for (var f in visitor.fields.entries.map((e) => e.key)) {
+      buffer.writeln('${visitor.className}.$f  : $f,');
+    }
+    buffer.writeln('     };');
+    buffer.writeln('     final f = items[this];');
+    buffer.writeln('     return (f != null) ? f(this) : orElse();');
+    buffer.writeln('  } // _mayBeMap');
   }
 }

@@ -7,12 +7,21 @@ part of 'purpose.dart';
 // **************************************************************************
 
 extension PurposePatternMatch on Purpose {
-  String get value => [
-        'loadTransaction',
-        'successfulTransaction',
-        'declinedTransaction',
-        'marketingCommunication'
-      ][index];
+  T map<T>({
+    required T Function(Purpose loadTransaction) loadTransaction,
+    required T Function(Purpose successfulTransaction) successfulTransaction,
+    required T Function(Purpose declinedTransaction) declinedTransaction,
+    required T Function(Purpose marketingCommunication) marketingCommunication,
+  }) {
+    final items = {
+      Purpose.loadTransaction: loadTransaction,
+      Purpose.successfulTransaction: successfulTransaction,
+      Purpose.declinedTransaction: declinedTransaction,
+      Purpose.marketingCommunication: marketingCommunication,
+    };
+    return items[this]!(this);
+  } // _map
+
   T when<T>({
     required T Function() loadTransaction,
     required T Function() successfulTransaction,
@@ -26,9 +35,26 @@ extension PurposePatternMatch on Purpose {
       Purpose.marketingCommunication: marketingCommunication,
     };
     return items[this]!();
-  }
+  } // _when
 
-  T whenOrElse<T>({
+  T mayBeMap<T>({
+    T Function(Purpose loadTransaction)? loadTransaction,
+    T Function(Purpose successfulTransaction)? successfulTransaction,
+    T Function(Purpose declinedTransaction)? declinedTransaction,
+    T Function(Purpose marketingCommunication)? marketingCommunication,
+    required T Function() orElse,
+  }) {
+    final items = {
+      Purpose.loadTransaction: loadTransaction,
+      Purpose.successfulTransaction: successfulTransaction,
+      Purpose.declinedTransaction: declinedTransaction,
+      Purpose.marketingCommunication: marketingCommunication,
+    };
+    final f = items[this];
+    return (f != null) ? f(this) : orElse();
+  } // _mayBeMap
+
+  T mayBeWhen<T>({
     T Function()? loadTransaction,
     T Function()? successfulTransaction,
     T Function()? declinedTransaction,
@@ -43,5 +69,5 @@ extension PurposePatternMatch on Purpose {
     };
     final f = items[this];
     return (f != null) ? f() : orElse();
-  }
-}
+  } // _mayBeWhen
+} // PurposePatternMatch
