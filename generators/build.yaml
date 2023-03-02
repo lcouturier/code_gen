@@ -8,8 +8,8 @@ builders:
   generators:
     target: ":generators"
     import: "package:generators/generators.dart"
-    builder_factories: ["generateEnumWhen"] #Builder name(BuilderOptions)
-    build_extensions: { ".dart": [".g.dart"] }
+    builder_factories: ["steroidsGenerator"]
+    build_extensions: { ".dart": [".steroids.g.dart"] }
     auto_apply: dependents
     build_to: cache
     applies_builders: ["source_gen|combining_builder"]
