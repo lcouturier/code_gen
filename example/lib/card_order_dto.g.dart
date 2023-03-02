@@ -20,6 +20,22 @@ Map<String, dynamic> _$CardOrderResultDtoToJson(CardOrderResultDto instance) =>
 // EnumWhenGenerator
 // **************************************************************************
 
+extension StateFromStringExtension on Iterable<State> {
+  State? fromString(String value) {
+    final item =
+        value.replaceAll('State.', '').replaceAll('_', '').toLowerCase();
+    return cast<State?>().firstWhere(
+        (e) =>
+            e
+                .toString()
+                .replaceAll('State.', '')
+                .replaceAll('_', '')
+                .toLowerCase() ==
+            item,
+        orElse: () => null);
+  }
+}
+
 extension StateExtension on State {
   bool get isEnabled => this == State.enabled;
   bool get isDisabled => this == State.disabled;

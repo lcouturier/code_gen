@@ -6,6 +6,22 @@ part of 'form_factor.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
+extension FormFactorFromStringExtension on Iterable<FormFactor> {
+  FormFactor? fromString(String value) {
+    final item =
+        value.replaceAll('FormFactor.', '').replaceAll('_', '').toLowerCase();
+    return cast<FormFactor?>().firstWhere(
+        (e) =>
+            e
+                .toString()
+                .replaceAll('FormFactor.', '')
+                .replaceAll('_', '')
+                .toLowerCase() ==
+            item,
+        orElse: () => null);
+  }
+}
+
 extension FormFactorExtension on FormFactor {
   bool get isPlastic => this == FormFactor.plastic;
   bool get isVirtual => this == FormFactor.virtual;

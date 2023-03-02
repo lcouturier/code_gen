@@ -6,6 +6,22 @@ part of 'card_status.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
+extension CardStatusFromStringExtension on Iterable<CardStatus> {
+  CardStatus? fromString(String value) {
+    final item =
+        value.replaceAll('CardStatus.', '').replaceAll('_', '').toLowerCase();
+    return cast<CardStatus?>().firstWhere(
+        (e) =>
+            e
+                .toString()
+                .replaceAll('CardStatus.', '')
+                .replaceAll('_', '')
+                .toLowerCase() ==
+            item,
+        orElse: () => null);
+  }
+}
+
 extension CardStatusExtension on CardStatus {
   bool get isActive => this == CardStatus.active;
   bool get isIssued => this == CardStatus.issued;

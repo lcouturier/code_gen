@@ -6,6 +6,22 @@ part of 'purpose.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
+extension PurposeFromStringExtension on Iterable<Purpose> {
+  Purpose? fromString(String value) {
+    final item =
+        value.replaceAll('Purpose.', '').replaceAll('_', '').toLowerCase();
+    return cast<Purpose?>().firstWhere(
+        (e) =>
+            e
+                .toString()
+                .replaceAll('Purpose.', '')
+                .replaceAll('_', '')
+                .toLowerCase() ==
+            item,
+        orElse: () => null);
+  }
+}
+
 extension PurposeExtension on Purpose {
   bool get isLoadTransaction => this == Purpose.loadTransaction;
   bool get isSuccessfulTransaction => this == Purpose.successfulTransaction;

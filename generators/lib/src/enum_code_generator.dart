@@ -51,6 +51,7 @@ class EnumCodeGenerator {
 
   String generate() {
     final annotation = _getAnnotation();
+    generateFromString(element.name);
     _generateExtensionHeader();
     if (annotation.hasChecker) {
       _generateProperties();
@@ -219,5 +220,17 @@ class EnumCodeGenerator {
     _generated.writeln('}) {');
     _generateDictionary();
     _generateMayBeMapReturn();
+  }
+
+  void generateFromString(String name) {
+    _generated.writeln('extension ${name}FromStringExtension on Iterable<$name> {');
+    _generated.writeln('$name? fromString(String value) {');
+
+    _generated.writeln('  final item = value.replaceAll(\'$name.\', \'\').replaceAll(\'_\', \'\').toLowerCase();');
+    _generated.writeln('  return cast<$name?>().firstWhere((e) =>');
+    _generated.writeln('    e.toString().replaceAll(\'$name.\', \'\').replaceAll(\'_\', \'\').toLowerCase() == item');
+    _generated.writeln('  , orElse: () => null);');
+    _generated.writeln('}');
+    _generated.writeln('}');
   }
 }

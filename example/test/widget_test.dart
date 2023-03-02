@@ -9,6 +9,14 @@ import 'package:example/form_factor.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  test('fromString 1', () {
+    final result = FormFactor.values.fromString("Virtual");
+    expect(result, FormFactor.virtual);
+  });
+  test('fromString 2', () {
+    final result = FormFactor.values.fromString("Virt");
+    expect(result, null);
+  });
   test('when 1', () {
     FormFactor value = FormFactor.virtual;
     final result = value.when(plastic: () => 'plastic', virtual: () => 'virtual');
