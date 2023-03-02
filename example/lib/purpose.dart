@@ -2,7 +2,7 @@ import 'package:annotations/annotations.dart';
 
 part 'purpose.g.dart';
 
-@whenAnnotation
+@steroids
 enum Purpose {
   loadTransaction,
   successfulTransaction,

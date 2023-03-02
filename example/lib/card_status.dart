@@ -2,7 +2,7 @@ import 'package:annotations/annotations.dart';
 
 part 'card_status.g.dart';
 
-@whenAnnotation
+@steroids
 enum CardStatus {
   active("Active"),
   issued("Issued"),
