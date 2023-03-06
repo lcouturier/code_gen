@@ -1,3 +1,4 @@
+// ignore: unnecessary_library_directive
 library generators;
 
 import 'package:build/build.dart';

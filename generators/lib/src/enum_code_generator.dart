@@ -1,4 +1,5 @@
-// ignore: depend_on_referenced_packages
+// ignore_for_file: public_member_api_docs, avoid_positional_boolean_parameters, prefer_asserts_with_message, depend_on_referenced_packages
+
 import 'package:analyzer/dart/element/element.dart';
 import 'package:annotations/annotations.dart';
 import 'package:source_gen/source_gen.dart';
@@ -17,13 +18,12 @@ enum MethodType {
 }
 
 class EnumCodeGenerator {
-  final EnumElement element;
-  final _generated = StringBuffer();
-  late List<FieldElement> fields;
-
   EnumCodeGenerator(this.element) : assert(element.kind == ElementKind.ENUM) {
     fields = element.fields.where((e) => e.isEnumConstant).toList();
   }
+  final EnumElement element;
+  final _generated = StringBuffer();
+  late List<FieldElement> fields;
 
   SteroidsEnum _getAnnotation() {
     final annotation = const TypeChecker.fromRuntime(SteroidsEnum).firstAnnotationOf(element);
@@ -69,16 +69,17 @@ class EnumCodeGenerator {
 
   void _generateProperties() {
     final items = fields.map((e) {
-      var name = e.name.replaceRange(0, 1, e.name[0].toUpperCase());
+      final name = e.name.replaceRange(0, 1, e.name[0].toUpperCase());
       return 'bool get is$name => this == ${element.name}.${e.name};';
     });
-    for (var e in items) {
+    for (final e in items) {
       _generated.writeln(e);
     }
     _generated.writeln();
     final values = fields.map((e) => "'${e.name}'").join(", ");
-    _generated.writeln('String get value => [$values][index];');
-    _generated.writeln();
+    _generated
+      ..writeln('String get value => [$values][index];')
+      ..writeln();
   }
 
   void _generateMethods(SteroidsEnum annotation) {
@@ -101,75 +102,84 @@ class EnumCodeGenerator {
 
   void _generateDictionary() {
     _generated.writeln('     final items = {');
-    for (var f in fields.map((e) => e.name)) {
+    for (final f in fields.map((e) => e.name)) {
       _generated.writeln('${element.name}.$f  : $f,');
     }
     _generated.writeln('     };');
   }
 
   void _generateMapParameters(bool isNullable) {
-    for (var f in fields.map((e) => e.name)) {
+    for (final f in fields.map((e) => e.name)) {
       _generated
           .writeln('  ${isNullable ? "" : "required"} T Function(${element.name} $f)${isNullable ? "?" : ""} $f,');
     }
   }
 
   void _generateWhenParameters(bool isNullable) {
-    for (var f in fields.map((e) => e.name)) {
+    for (final f in fields.map((e) => e.name)) {
       _generated.writeln('  ${isNullable ? "" : "required"} T Function()${isNullable ? "?" : ""} $f,');
     }
   }
 
   void _generateOnlyWhenParameters() {
-    for (var f in fields.map((e) => e.name)) {
+    for (final f in fields.map((e) => e.name)) {
       _generated.writeln('  void Function()? $f,');
     }
   }
 
   void _generateOnlyWhenReturn() {
-    _generated.writeln('     final f = items[this];');
-    _generated.writeln('     f?.call();');
-    _generated.writeln('  }');
+    _generated
+      ..writeln('     final f = items[this];')
+      ..writeln('     f?.call();')
+      ..writeln('  }');
   }
 
   void _generateMayBeWhenReturn() {
-    _generated.writeln('     final f = items[this];');
-    _generated.writeln('     return (f != null) ? f() : orElse();');
-    _generated.writeln('  }');
+    _generated
+      ..writeln('     final f = items[this];')
+      ..writeln('     return (f != null) ? f() : orElse();')
+      ..writeln('  }');
   }
 
   void _generateMayBeMapReturn() {
-    _generated.writeln('     final f = items[this];');
-    _generated.writeln('     return (f != null) ? f(this) : orElse();');
-    _generated.writeln('  }');
+    _generated
+      ..writeln('     final f = items[this];')
+      ..writeln('     return (f != null) ? f(this) : orElse();')
+      ..writeln('  }');
   }
 
   void _generateMapReturn() {
-    _generated.writeln('     return items[this]!(this);');
-    _generated.writeln('  }');
+    _generated
+      ..writeln('     return items[this]!(this);')
+      ..writeln('  }');
   }
 
   void _generateWhenReturn() {
-    _generated.writeln('     return items[this]!();');
-    _generated.writeln('  }');
+    _generated
+      ..writeln('     return items[this]!();')
+      ..writeln('  }');
   }
 
   void _generateComment(MethodType methodType) {
-    _generated.writeln('/// Use `${methodType.label}()` method when you want to perform some action based on the enum');
-    _generated.writeln('/// ```dart');
-    _generated.writeln('/// response.${methodType.label}(');
-    for (var name in fields.map((e) => e.name).take(methodType.isMayBe ? 1 : fields.length)) {
-      _generated.writeln('///   $name: ${methodType.isMapMethod ? "(e)" : "()"} {');
-      _generated.writeln('  //       Do some actions only if the response is ${element.name}.$name"');
-      _generated.writeln('///   }');
+    _generated
+      ..writeln('/// Use `${methodType.label}()` method when you want to perform some action based on the enum')
+      ..writeln('/// ```dart')
+      ..writeln('/// response.${methodType.label}(');
+    for (final name in fields.map((e) => e.name).take(methodType.isMayBe ? 1 : fields.length)) {
+      _generated
+        ..writeln('///   $name: ${methodType.isMapMethod ? "(e)" : "()"} {')
+        ..writeln('  //       Do some actions only if the response is ${element.name}.$name"')
+        ..writeln('///   }');
     }
     if (methodType.isMayBe) {
-      _generated.writeln('///   orElse: () {');
-      _generated.writeln('  //       Do some actions only if the response is not found');
-      _generated.writeln('///   }');
+      _generated
+        ..writeln('///   orElse: () {')
+        ..writeln('  //       Do some actions only if the response is not found')
+        ..writeln('///   }');
     }
-    _generated.writeln('/// );');
-    _generated.writeln('/// ```');
+    _generated
+      ..writeln('/// );')
+      ..writeln('/// ```');
   }
 
   void _map() {
@@ -193,8 +203,9 @@ class EnumCodeGenerator {
   }
 
   void _onlyWhen() {
-    _generated.writeln();
-    _generated.writeln('void onlyWhen<T>({');
+    _generated
+      ..writeln()
+      ..writeln('void onlyWhen<T>({');
     _generateOnlyWhenParameters();
     _generated.writeln('}) {');
     _generateDictionary();
@@ -206,41 +217,46 @@ class EnumCodeGenerator {
     _generateComment(MethodType.mayBeWhen);
     _generated.writeln('T mayBeWhen<T>({');
     _generateWhenParameters(true);
-    _generated.writeln('  required T Function() orElse,');
-    _generated.writeln('}) {');
+    _generated
+      ..writeln('  required T Function() orElse,')
+      ..writeln('}) {');
     _generateDictionary();
     _generateMayBeWhenReturn();
   }
 
   void _mayBeMap() {
-    _generated.writeln();
-    _generated.writeln('T mayBeMap<T>({');
+    _generated
+      ..writeln()
+      ..writeln('T mayBeMap<T>({');
     _generateMapParameters(true);
-    _generated.writeln('  required T Function() orElse,');
-    _generated.writeln('}) {');
+    _generated
+      ..writeln('  required T Function() orElse,')
+      ..writeln('}) {');
     _generateDictionary();
     _generateMayBeMapReturn();
   }
 
   void _generateIterableExtension(String name) {
-    _generated.writeln('extension ${name}FromStringExtension on Iterable<$name> {');
-    _generated.writeln('$name? fromString(String value) {');
-
-    _generated.writeln('  final item = value.replaceAll(\'$name.\', \'\').replaceAll(\'_\', \'\').toLowerCase();');
-    _generated.writeln('  return cast<$name?>().firstWhere((e) =>');
-    _generated.writeln('    e.toString().replaceAll(\'$name.\', \'\').replaceAll(\'_\', \'\').toLowerCase() == item');
-    _generated.writeln('  , orElse: () => null);');
-    _generated.writeln('}');
-    _generated.writeln('}');
+    _generated
+      ..writeln('extension ${name}FromStringExtension on Iterable<$name> {')
+      ..writeln('$name? fromString(String value) {')
+      ..writeln("  final item = value.replaceAll('$name.', '').replaceAll('_', '').toLowerCase();")
+      ..writeln('  return cast<$name?>().firstWhere((e) =>')
+      ..writeln("    e.toString().replaceAll('$name.', '').replaceAll('_', '').toLowerCase() == item")
+      ..writeln('  , orElse: () => null);')
+      ..writeln('}')
+      ..writeln('}');
   }
 
   void _generateStringExtension(String name) {
-    _generated.writeln('extension ${name}StringExtension on String {');
-    _generated.writeln('$name get get$name => {');
-    for (var f in fields.map((e) => e.name)) {
+    _generated
+      ..writeln('extension ${name}StringExtension on String {')
+      ..writeln('$name get get$name => {');
+    for (final f in fields.map((e) => e.name)) {
       _generated.writeln('"$f" :  $name.$f,');
     }
-    _generated.writeln('}[this]!;');
-    _generated.writeln('}');
+    _generated
+      ..writeln('}[this]!;')
+      ..writeln('}');
   }
 }
