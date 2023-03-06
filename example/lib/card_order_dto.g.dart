@@ -20,6 +20,13 @@ Map<String, dynamic> _$CardOrderResultDtoToJson(CardOrderResultDto instance) =>
 // EnumWhenGenerator
 // **************************************************************************
 
+extension StateStringExtension on String {
+  State get getState => {
+        "enabled": State.enabled,
+        "disabled": State.disabled,
+      }[this]!;
+}
+
 extension StateFromStringExtension on Iterable<State> {
   State? fromString(String value) {
     final item =

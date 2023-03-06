@@ -6,6 +6,20 @@ part of 'card_status.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
+extension CardStatusStringExtension on String {
+  CardStatus get getCardStatus => {
+        "active": CardStatus.active,
+        "issued": CardStatus.issued,
+        "blocked": CardStatus.blocked,
+        "lost": CardStatus.lost,
+        "damaged": CardStatus.damaged,
+        "cancelled": CardStatus.cancelled,
+        "stolen": CardStatus.stolen,
+        "pending": CardStatus.pending,
+        "expired": CardStatus.expired,
+      }[this]!;
+}
+
 extension CardStatusFromStringExtension on Iterable<CardStatus> {
   CardStatus? fromString(String value) {
     final item =

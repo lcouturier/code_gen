@@ -6,6 +6,13 @@ part of 'form_factor.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
+extension FormFactorStringExtension on String {
+  FormFactor get getFormFactor => {
+        "plastic": FormFactor.plastic,
+        "virtual": FormFactor.virtual,
+      }[this]!;
+}
+
 extension FormFactorFromStringExtension on Iterable<FormFactor> {
   FormFactor? fromString(String value) {
     final item =

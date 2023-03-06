@@ -6,6 +6,15 @@ part of 'purpose.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
+extension PurposeStringExtension on String {
+  Purpose get getPurpose => {
+        "loadTransaction": Purpose.loadTransaction,
+        "successfulTransaction": Purpose.successfulTransaction,
+        "declinedTransaction": Purpose.declinedTransaction,
+        "marketingCommunication": Purpose.marketingCommunication,
+      }[this]!;
+}
+
 extension PurposeFromStringExtension on Iterable<Purpose> {
   Purpose? fromString(String value) {
     final item =

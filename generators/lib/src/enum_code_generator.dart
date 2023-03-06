@@ -1,5 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
-
+// ignore: depend_on_referenced_packages
 import 'package:analyzer/dart/element/element.dart';
 import 'package:annotations/annotations.dart';
 import 'package:source_gen/source_gen.dart';
@@ -50,8 +49,9 @@ class EnumCodeGenerator {
   }
 
   String generate() {
+    _generateStringExtension(element.name);
+    _generateIterableExtension(element.name);
     final annotation = _getAnnotation();
-    generateFromString(element.name);
     _generateExtensionHeader();
     if (annotation.hasChecker) {
       _generateProperties();
@@ -222,7 +222,7 @@ class EnumCodeGenerator {
     _generateMayBeMapReturn();
   }
 
-  void generateFromString(String name) {
+  void _generateIterableExtension(String name) {
     _generated.writeln('extension ${name}FromStringExtension on Iterable<$name> {');
     _generated.writeln('$name? fromString(String value) {');
 
@@ -231,6 +231,16 @@ class EnumCodeGenerator {
     _generated.writeln('    e.toString().replaceAll(\'$name.\', \'\').replaceAll(\'_\', \'\').toLowerCase() == item');
     _generated.writeln('  , orElse: () => null);');
     _generated.writeln('}');
+    _generated.writeln('}');
+  }
+
+  void _generateStringExtension(String name) {
+    _generated.writeln('extension ${name}StringExtension on String {');
+    _generated.writeln('$name get get$name => {');
+    for (var f in fields.map((e) => e.name)) {
+      _generated.writeln('"$f" :  $name.$f,');
+    }
+    _generated.writeln('}[this]!;');
     _generated.writeln('}');
   }
 }
