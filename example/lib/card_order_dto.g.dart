@@ -62,8 +62,7 @@ extension ExtensionState on State {
       State.enabled: enabled,
       State.disabled: disabled,
     };
-    final f = items[this];
-    return (f != null) ? f() : orElse();
+    return items[this]?.call() ?? orElse();
   }
 
   T mayBeMap<T>({
@@ -81,7 +80,6 @@ extension ExtensionState on State {
       State.enabled: enabled,
       State.disabled: disabled,
     };
-    final f = items[this];
-    return (f != null) ? f(this) : orElse();
+    return items[this]?.call(this) ?? orElse();
   }
 }

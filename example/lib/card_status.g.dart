@@ -119,8 +119,7 @@ extension ExtensionCardStatus on CardStatus {
       CardStatus.pending: pending,
       CardStatus.expired: expired,
     };
-    final f = items[this];
-    return (f != null) ? f() : orElse();
+    return items[this]?.call() ?? orElse();
   }
 
   T mayBeMap<T>({
@@ -160,7 +159,6 @@ extension ExtensionCardStatus on CardStatus {
       CardStatus.pending: pending,
       CardStatus.expired: expired,
     };
-    final f = items[this];
-    return (f != null) ? f(this) : orElse();
+    return items[this]?.call(this) ?? orElse();
   }
 }

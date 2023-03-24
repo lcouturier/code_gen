@@ -69,8 +69,7 @@ extension ExtensionPurpose on Purpose {
       Purpose.declinedTransaction: declinedTransaction,
       Purpose.marketingCommunication: marketingCommunication,
     };
-    final f = items[this];
-    return (f != null) ? f() : orElse();
+    return items[this]?.call() ?? orElse();
   }
 
   T mayBeMap<T>({
@@ -95,7 +94,6 @@ extension ExtensionPurpose on Purpose {
       Purpose.declinedTransaction: declinedTransaction,
       Purpose.marketingCommunication: marketingCommunication,
     };
-    final f = items[this];
-    return (f != null) ? f(this) : orElse();
+    return items[this]?.call(this) ?? orElse();
   }
 }

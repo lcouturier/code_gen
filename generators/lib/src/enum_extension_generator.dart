@@ -136,10 +136,9 @@ class ClassGenerator {
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name}  : ${field.name},');
     }
-    bodyBuffer.writeln('};');
     bodyBuffer
-      ..writeln('final f = items[this];')
-      ..writeln('return (f != null) ? f() : orElse();');
+      ..writeln('};')
+      ..writeln('return items[this]?.call() ?? orElse();');
 
     for (final field in fields) {
       params.add(
@@ -193,9 +192,7 @@ class ClassGenerator {
       bodyBuffer.writeln('${element.name}.${field.name}  : ${field.name},');
     }
     bodyBuffer.writeln('};');
-    bodyBuffer
-      ..writeln('final f = items[this];')
-      ..writeln('return (f != null) ? f(this) : orElse();');
+    bodyBuffer.writeln('return items[this]?.call(this) ?? orElse();');
 
     for (final field in fields) {
       params.add(

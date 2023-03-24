@@ -48,8 +48,7 @@ extension ExtensionFormFactor on FormFactor {
       FormFactor.plastic: plastic,
       FormFactor.virtual: virtual,
     };
-    final f = items[this];
-    return (f != null) ? f() : orElse();
+    return items[this]?.call() ?? orElse();
   }
 
   T mayBeMap<T>({
@@ -67,7 +66,6 @@ extension ExtensionFormFactor on FormFactor {
       FormFactor.plastic: plastic,
       FormFactor.virtual: virtual,
     };
-    final f = items[this];
-    return (f != null) ? f(this) : orElse();
+    return items[this]?.call(this) ?? orElse();
   }
 }
