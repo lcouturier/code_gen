@@ -52,12 +52,14 @@ class ClassGenerator {
     final bodyBuffer = StringBuffer();
 
     bodyBuffer.writeln('switch(this) {');
-
     for (final field in fields) {
       bodyBuffer
         ..writeln('case ${element.name}.${field.name}:')
         ..writeln('return ${field.name}(this);');
+    }
+    bodyBuffer.writeln('}');
 
+    for (final field in fields) {
       params.add(
         Parameter((p) {
           p
@@ -69,8 +71,6 @@ class ClassGenerator {
         }),
       );
     }
-
-    bodyBuffer.writeln('}');
 
     return Method(
       (m) => m
@@ -88,12 +88,14 @@ class ClassGenerator {
     final bodyBuffer = StringBuffer();
 
     bodyBuffer.writeln('switch(this) {');
-
     for (final field in fields) {
       bodyBuffer
         ..writeln('case ${element.name}.${field.name}:')
         ..writeln('return ${field.name}();');
+    }
+    bodyBuffer.writeln('}');
 
+    for (final field in fields) {
       params.add(
         Parameter((p) {
           p
@@ -105,8 +107,6 @@ class ClassGenerator {
         }),
       );
     }
-
-    bodyBuffer.writeln('}');
 
     return Method(
       (m) => m
@@ -133,10 +133,15 @@ class ClassGenerator {
     );
 
     bodyBuffer.writeln('final items = {');
-
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name}  : ${field.name},');
+    }
+    bodyBuffer.writeln('};');
+    bodyBuffer
+      ..writeln('final f = items[this];')
+      ..writeln('return (f != null) ? f() : orElse();');
 
+    for (final field in fields) {
       params.add(
         Parameter((p) {
           p
@@ -158,12 +163,6 @@ class ClassGenerator {
           ..build();
       }),
     );
-
-    bodyBuffer.writeln('};');
-
-    bodyBuffer
-      ..writeln('final f = items[this];')
-      ..writeln('return (f != null) ? f() : orElse();');
 
     return Method(
       (m) => m
@@ -190,10 +189,15 @@ class ClassGenerator {
     );
 
     bodyBuffer.writeln('final items = {');
-
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name}  : ${field.name},');
+    }
+    bodyBuffer.writeln('};');
+    bodyBuffer
+      ..writeln('final f = items[this];')
+      ..writeln('return (f != null) ? f(this) : orElse();');
 
+    for (final field in fields) {
       params.add(
         Parameter((p) {
           p
@@ -215,12 +219,6 @@ class ClassGenerator {
           ..build();
       }),
     );
-
-    bodyBuffer.writeln('};');
-
-    bodyBuffer
-      ..writeln('final f = items[this];')
-      ..writeln('return (f != null) ? f(this) : orElse();');
 
     return Method(
       (m) => m
