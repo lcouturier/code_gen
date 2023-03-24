@@ -6,37 +6,7 @@ part of 'card_status.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
-extension CardStatusStringExtension on String {
-  CardStatus get getCardStatus => {
-        "active": CardStatus.active,
-        "issued": CardStatus.issued,
-        "blocked": CardStatus.blocked,
-        "lost": CardStatus.lost,
-        "damaged": CardStatus.damaged,
-        "cancelled": CardStatus.cancelled,
-        "stolen": CardStatus.stolen,
-        "pending": CardStatus.pending,
-        "expired": CardStatus.expired,
-      }[this]!;
-}
-
-extension CardStatusFromStringExtension on Iterable<CardStatus> {
-  CardStatus? fromString(String value) {
-    final item =
-        value.replaceAll('CardStatus.', '').replaceAll('_', '').toLowerCase();
-    return cast<CardStatus?>().firstWhere(
-        (e) =>
-            e
-                .toString()
-                .replaceAll('CardStatus.', '')
-                .replaceAll('_', '')
-                .toLowerCase() ==
-            item,
-        orElse: () => null);
-  }
-}
-
-extension CardStatusExtension on CardStatus {
+extension ExtensionCardStatus on CardStatus {
   bool get isActive => this == CardStatus.active;
   bool get isIssued => this == CardStatus.issued;
   bool get isBlocked => this == CardStatus.blocked;
@@ -46,51 +16,6 @@ extension CardStatusExtension on CardStatus {
   bool get isStolen => this == CardStatus.stolen;
   bool get isPending => this == CardStatus.pending;
   bool get isExpired => this == CardStatus.expired;
-
-  String get value => [
-        'active',
-        'issued',
-        'blocked',
-        'lost',
-        'damaged',
-        'cancelled',
-        'stolen',
-        'pending',
-        'expired'
-      ][index];
-
-  /// Use `when()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.when(
-  ///   active: () {
-  //       Do some actions only if the response is CardStatus.active"
-  ///   }
-  ///   issued: () {
-  //       Do some actions only if the response is CardStatus.issued"
-  ///   }
-  ///   blocked: () {
-  //       Do some actions only if the response is CardStatus.blocked"
-  ///   }
-  ///   lost: () {
-  //       Do some actions only if the response is CardStatus.lost"
-  ///   }
-  ///   damaged: () {
-  //       Do some actions only if the response is CardStatus.damaged"
-  ///   }
-  ///   cancelled: () {
-  //       Do some actions only if the response is CardStatus.cancelled"
-  ///   }
-  ///   stolen: () {
-  //       Do some actions only if the response is CardStatus.stolen"
-  ///   }
-  ///   pending: () {
-  //       Do some actions only if the response is CardStatus.pending"
-  ///   }
-  ///   expired: () {
-  //       Do some actions only if the response is CardStatus.expired"
-  ///   }
-  /// );
-  /// ```
   T when<T>({
     required T Function() active,
     required T Function() issued,
@@ -102,57 +27,61 @@ extension CardStatusExtension on CardStatus {
     required T Function() pending,
     required T Function() expired,
   }) {
-    final items = {
-      CardStatus.active: active,
-      CardStatus.issued: issued,
-      CardStatus.blocked: blocked,
-      CardStatus.lost: lost,
-      CardStatus.damaged: damaged,
-      CardStatus.cancelled: cancelled,
-      CardStatus.stolen: stolen,
-      CardStatus.pending: pending,
-      CardStatus.expired: expired,
-    };
-    return items[this]!();
+    switch (this) {
+      case CardStatus.active:
+        return active();
+      case CardStatus.issued:
+        return issued();
+      case CardStatus.blocked:
+        return blocked();
+      case CardStatus.lost:
+        return lost();
+      case CardStatus.damaged:
+        return damaged();
+      case CardStatus.cancelled:
+        return cancelled();
+      case CardStatus.stolen:
+        return stolen();
+      case CardStatus.pending:
+        return pending();
+      case CardStatus.expired:
+        return expired();
+    }
   }
 
-  void onlyWhen<T>({
-    void Function()? active,
-    void Function()? issued,
-    void Function()? blocked,
-    void Function()? lost,
-    void Function()? damaged,
-    void Function()? cancelled,
-    void Function()? stolen,
-    void Function()? pending,
-    void Function()? expired,
+  T map<T>({
+    required T Function(CardStatus) active,
+    required T Function(CardStatus) issued,
+    required T Function(CardStatus) blocked,
+    required T Function(CardStatus) lost,
+    required T Function(CardStatus) damaged,
+    required T Function(CardStatus) cancelled,
+    required T Function(CardStatus) stolen,
+    required T Function(CardStatus) pending,
+    required T Function(CardStatus) expired,
   }) {
-    final items = {
-      CardStatus.active: active,
-      CardStatus.issued: issued,
-      CardStatus.blocked: blocked,
-      CardStatus.lost: lost,
-      CardStatus.damaged: damaged,
-      CardStatus.cancelled: cancelled,
-      CardStatus.stolen: stolen,
-      CardStatus.pending: pending,
-      CardStatus.expired: expired,
-    };
-    final f = items[this];
-    f?.call();
+    switch (this) {
+      case CardStatus.active:
+        return active(this);
+      case CardStatus.issued:
+        return issued(this);
+      case CardStatus.blocked:
+        return blocked(this);
+      case CardStatus.lost:
+        return lost(this);
+      case CardStatus.damaged:
+        return damaged(this);
+      case CardStatus.cancelled:
+        return cancelled(this);
+      case CardStatus.stolen:
+        return stolen(this);
+      case CardStatus.pending:
+        return pending(this);
+      case CardStatus.expired:
+        return expired(this);
+    }
   }
 
-  /// Use `mayBeWhen()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.mayBeWhen(
-  ///   active: () {
-  //       Do some actions only if the response is CardStatus.active"
-  ///   }
-  ///   orElse: () {
-  //       Do some actions only if the response is not found
-  ///   }
-  /// );
-  /// ```
   T mayBeWhen<T>({
     T Function()? active,
     T Function()? issued,
@@ -165,6 +94,20 @@ extension CardStatusExtension on CardStatus {
     T Function()? expired,
     required T Function() orElse,
   }) {
+    assert(() {
+      if (active == null &&
+          issued == null &&
+          blocked == null &&
+          lost == null &&
+          damaged == null &&
+          cancelled == null &&
+          stolen == null &&
+          pending == null &&
+          expired == null) {
+        throw 'check for at least one case';
+      }
+      return true;
+    }());
     final items = {
       CardStatus.active: active,
       CardStatus.issued: issued,
@@ -180,75 +123,32 @@ extension CardStatusExtension on CardStatus {
     return (f != null) ? f() : orElse();
   }
 
-  /// Use `map()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.map(
-  ///   active: (e) {
-  //       Do some actions only if the response is CardStatus.active"
-  ///   }
-  ///   issued: (e) {
-  //       Do some actions only if the response is CardStatus.issued"
-  ///   }
-  ///   blocked: (e) {
-  //       Do some actions only if the response is CardStatus.blocked"
-  ///   }
-  ///   lost: (e) {
-  //       Do some actions only if the response is CardStatus.lost"
-  ///   }
-  ///   damaged: (e) {
-  //       Do some actions only if the response is CardStatus.damaged"
-  ///   }
-  ///   cancelled: (e) {
-  //       Do some actions only if the response is CardStatus.cancelled"
-  ///   }
-  ///   stolen: (e) {
-  //       Do some actions only if the response is CardStatus.stolen"
-  ///   }
-  ///   pending: (e) {
-  //       Do some actions only if the response is CardStatus.pending"
-  ///   }
-  ///   expired: (e) {
-  //       Do some actions only if the response is CardStatus.expired"
-  ///   }
-  /// );
-  /// ```
-  T map<T>({
-    required T Function(CardStatus active) active,
-    required T Function(CardStatus issued) issued,
-    required T Function(CardStatus blocked) blocked,
-    required T Function(CardStatus lost) lost,
-    required T Function(CardStatus damaged) damaged,
-    required T Function(CardStatus cancelled) cancelled,
-    required T Function(CardStatus stolen) stolen,
-    required T Function(CardStatus pending) pending,
-    required T Function(CardStatus expired) expired,
-  }) {
-    final items = {
-      CardStatus.active: active,
-      CardStatus.issued: issued,
-      CardStatus.blocked: blocked,
-      CardStatus.lost: lost,
-      CardStatus.damaged: damaged,
-      CardStatus.cancelled: cancelled,
-      CardStatus.stolen: stolen,
-      CardStatus.pending: pending,
-      CardStatus.expired: expired,
-    };
-    return items[this]!(this);
-  }
-
   T mayBeMap<T>({
-    T Function(CardStatus active)? active,
-    T Function(CardStatus issued)? issued,
-    T Function(CardStatus blocked)? blocked,
-    T Function(CardStatus lost)? lost,
-    T Function(CardStatus damaged)? damaged,
-    T Function(CardStatus cancelled)? cancelled,
-    T Function(CardStatus stolen)? stolen,
-    T Function(CardStatus pending)? pending,
-    T Function(CardStatus expired)? expired,
+    T Function(CardStatus)? active,
+    T Function(CardStatus)? issued,
+    T Function(CardStatus)? blocked,
+    T Function(CardStatus)? lost,
+    T Function(CardStatus)? damaged,
+    T Function(CardStatus)? cancelled,
+    T Function(CardStatus)? stolen,
+    T Function(CardStatus)? pending,
+    T Function(CardStatus)? expired,
     required T Function() orElse,
   }) {
+    assert(() {
+      if (active == null &&
+          issued == null &&
+          blocked == null &&
+          lost == null &&
+          damaged == null &&
+          cancelled == null &&
+          stolen == null &&
+          pending == null &&
+          expired == null) {
+        throw 'check for at least one case';
+      }
+      return true;
+    }());
     final items = {
       CardStatus.active: active,
       CardStatus.issued: issued,

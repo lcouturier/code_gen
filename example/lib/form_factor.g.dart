@@ -6,85 +6,44 @@ part of 'form_factor.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
-extension FormFactorStringExtension on String {
-  FormFactor get getFormFactor => {
-        "plastic": FormFactor.plastic,
-        "virtual": FormFactor.virtual,
-      }[this]!;
-}
-
-extension FormFactorFromStringExtension on Iterable<FormFactor> {
-  FormFactor? fromString(String value) {
-    final item =
-        value.replaceAll('FormFactor.', '').replaceAll('_', '').toLowerCase();
-    return cast<FormFactor?>().firstWhere(
-        (e) =>
-            e
-                .toString()
-                .replaceAll('FormFactor.', '')
-                .replaceAll('_', '')
-                .toLowerCase() ==
-            item,
-        orElse: () => null);
-  }
-}
-
-extension FormFactorExtension on FormFactor {
+extension ExtensionFormFactor on FormFactor {
   bool get isPlastic => this == FormFactor.plastic;
   bool get isVirtual => this == FormFactor.virtual;
-
-  String get value => ['plastic', 'virtual'][index];
-
-  /// Use `when()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.when(
-  ///   plastic: () {
-  //       Do some actions only if the response is FormFactor.plastic"
-  ///   }
-  ///   virtual: () {
-  //       Do some actions only if the response is FormFactor.virtual"
-  ///   }
-  /// );
-  /// ```
   T when<T>({
     required T Function() plastic,
     required T Function() virtual,
   }) {
-    final items = {
-      FormFactor.plastic: plastic,
-      FormFactor.virtual: virtual,
-    };
-    return items[this]!();
+    switch (this) {
+      case FormFactor.plastic:
+        return plastic();
+      case FormFactor.virtual:
+        return virtual();
+    }
   }
 
-  void onlyWhen<T>({
-    void Function()? plastic,
-    void Function()? virtual,
+  T map<T>({
+    required T Function(FormFactor) plastic,
+    required T Function(FormFactor) virtual,
   }) {
-    final items = {
-      FormFactor.plastic: plastic,
-      FormFactor.virtual: virtual,
-    };
-    final f = items[this];
-    f?.call();
+    switch (this) {
+      case FormFactor.plastic:
+        return plastic(this);
+      case FormFactor.virtual:
+        return virtual(this);
+    }
   }
 
-  /// Use `mayBeWhen()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.mayBeWhen(
-  ///   plastic: () {
-  //       Do some actions only if the response is FormFactor.plastic"
-  ///   }
-  ///   orElse: () {
-  //       Do some actions only if the response is not found
-  ///   }
-  /// );
-  /// ```
   T mayBeWhen<T>({
     T Function()? plastic,
     T Function()? virtual,
     required T Function() orElse,
   }) {
+    assert(() {
+      if (plastic == null && virtual == null) {
+        throw 'check for at least one case';
+      }
+      return true;
+    }());
     final items = {
       FormFactor.plastic: plastic,
       FormFactor.virtual: virtual,
@@ -93,33 +52,17 @@ extension FormFactorExtension on FormFactor {
     return (f != null) ? f() : orElse();
   }
 
-  /// Use `map()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.map(
-  ///   plastic: (e) {
-  //       Do some actions only if the response is FormFactor.plastic"
-  ///   }
-  ///   virtual: (e) {
-  //       Do some actions only if the response is FormFactor.virtual"
-  ///   }
-  /// );
-  /// ```
-  T map<T>({
-    required T Function(FormFactor plastic) plastic,
-    required T Function(FormFactor virtual) virtual,
-  }) {
-    final items = {
-      FormFactor.plastic: plastic,
-      FormFactor.virtual: virtual,
-    };
-    return items[this]!(this);
-  }
-
   T mayBeMap<T>({
-    T Function(FormFactor plastic)? plastic,
-    T Function(FormFactor virtual)? virtual,
+    T Function(FormFactor)? plastic,
+    T Function(FormFactor)? virtual,
     required T Function() orElse,
   }) {
+    assert(() {
+      if (plastic == null && virtual == null) {
+        throw 'check for at least one case';
+      }
+      return true;
+    }());
     final items = {
       FormFactor.plastic: plastic,
       FormFactor.virtual: virtual,

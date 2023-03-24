@@ -6,103 +6,47 @@ part of 'purpose.dart';
 // EnumWhenGenerator
 // **************************************************************************
 
-extension PurposeStringExtension on String {
-  Purpose get getPurpose => {
-        "loadTransaction": Purpose.loadTransaction,
-        "successfulTransaction": Purpose.successfulTransaction,
-        "declinedTransaction": Purpose.declinedTransaction,
-        "marketingCommunication": Purpose.marketingCommunication,
-      }[this]!;
-}
-
-extension PurposeFromStringExtension on Iterable<Purpose> {
-  Purpose? fromString(String value) {
-    final item =
-        value.replaceAll('Purpose.', '').replaceAll('_', '').toLowerCase();
-    return cast<Purpose?>().firstWhere(
-        (e) =>
-            e
-                .toString()
-                .replaceAll('Purpose.', '')
-                .replaceAll('_', '')
-                .toLowerCase() ==
-            item,
-        orElse: () => null);
-  }
-}
-
-extension PurposeExtension on Purpose {
-  bool get isLoadTransaction => this == Purpose.loadTransaction;
-  bool get isSuccessfulTransaction => this == Purpose.successfulTransaction;
-  bool get isDeclinedTransaction => this == Purpose.declinedTransaction;
-  bool get isMarketingCommunication => this == Purpose.marketingCommunication;
-
-  String get value => [
-        'loadTransaction',
-        'successfulTransaction',
-        'declinedTransaction',
-        'marketingCommunication'
-      ][index];
-
-  /// Use `when()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.when(
-  ///   loadTransaction: () {
-  //       Do some actions only if the response is Purpose.loadTransaction"
-  ///   }
-  ///   successfulTransaction: () {
-  //       Do some actions only if the response is Purpose.successfulTransaction"
-  ///   }
-  ///   declinedTransaction: () {
-  //       Do some actions only if the response is Purpose.declinedTransaction"
-  ///   }
-  ///   marketingCommunication: () {
-  //       Do some actions only if the response is Purpose.marketingCommunication"
-  ///   }
-  /// );
-  /// ```
+extension ExtensionPurpose on Purpose {
+  bool get isLoadtransaction => this == Purpose.loadTransaction;
+  bool get isSuccessfultransaction => this == Purpose.successfulTransaction;
+  bool get isDeclinedtransaction => this == Purpose.declinedTransaction;
+  bool get isMarketingcommunication => this == Purpose.marketingCommunication;
   T when<T>({
     required T Function() loadTransaction,
     required T Function() successfulTransaction,
     required T Function() declinedTransaction,
     required T Function() marketingCommunication,
   }) {
-    final items = {
-      Purpose.loadTransaction: loadTransaction,
-      Purpose.successfulTransaction: successfulTransaction,
-      Purpose.declinedTransaction: declinedTransaction,
-      Purpose.marketingCommunication: marketingCommunication,
-    };
-    return items[this]!();
+    switch (this) {
+      case Purpose.loadTransaction:
+        return loadTransaction();
+      case Purpose.successfulTransaction:
+        return successfulTransaction();
+      case Purpose.declinedTransaction:
+        return declinedTransaction();
+      case Purpose.marketingCommunication:
+        return marketingCommunication();
+    }
   }
 
-  void onlyWhen<T>({
-    void Function()? loadTransaction,
-    void Function()? successfulTransaction,
-    void Function()? declinedTransaction,
-    void Function()? marketingCommunication,
+  T map<T>({
+    required T Function(Purpose) loadTransaction,
+    required T Function(Purpose) successfulTransaction,
+    required T Function(Purpose) declinedTransaction,
+    required T Function(Purpose) marketingCommunication,
   }) {
-    final items = {
-      Purpose.loadTransaction: loadTransaction,
-      Purpose.successfulTransaction: successfulTransaction,
-      Purpose.declinedTransaction: declinedTransaction,
-      Purpose.marketingCommunication: marketingCommunication,
-    };
-    final f = items[this];
-    f?.call();
+    switch (this) {
+      case Purpose.loadTransaction:
+        return loadTransaction(this);
+      case Purpose.successfulTransaction:
+        return successfulTransaction(this);
+      case Purpose.declinedTransaction:
+        return declinedTransaction(this);
+      case Purpose.marketingCommunication:
+        return marketingCommunication(this);
+    }
   }
 
-  /// Use `mayBeWhen()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.mayBeWhen(
-  ///   loadTransaction: () {
-  //       Do some actions only if the response is Purpose.loadTransaction"
-  ///   }
-  ///   orElse: () {
-  //       Do some actions only if the response is not found
-  ///   }
-  /// );
-  /// ```
   T mayBeWhen<T>({
     T Function()? loadTransaction,
     T Function()? successfulTransaction,
@@ -110,6 +54,15 @@ extension PurposeExtension on Purpose {
     T Function()? marketingCommunication,
     required T Function() orElse,
   }) {
+    assert(() {
+      if (loadTransaction == null &&
+          successfulTransaction == null &&
+          declinedTransaction == null &&
+          marketingCommunication == null) {
+        throw 'check for at least one case';
+      }
+      return true;
+    }());
     final items = {
       Purpose.loadTransaction: loadTransaction,
       Purpose.successfulTransaction: successfulTransaction,
@@ -120,45 +73,22 @@ extension PurposeExtension on Purpose {
     return (f != null) ? f() : orElse();
   }
 
-  /// Use `map()` method when you want to perform some action based on the enum
-  /// ```dart
-  /// response.map(
-  ///   loadTransaction: (e) {
-  //       Do some actions only if the response is Purpose.loadTransaction"
-  ///   }
-  ///   successfulTransaction: (e) {
-  //       Do some actions only if the response is Purpose.successfulTransaction"
-  ///   }
-  ///   declinedTransaction: (e) {
-  //       Do some actions only if the response is Purpose.declinedTransaction"
-  ///   }
-  ///   marketingCommunication: (e) {
-  //       Do some actions only if the response is Purpose.marketingCommunication"
-  ///   }
-  /// );
-  /// ```
-  T map<T>({
-    required T Function(Purpose loadTransaction) loadTransaction,
-    required T Function(Purpose successfulTransaction) successfulTransaction,
-    required T Function(Purpose declinedTransaction) declinedTransaction,
-    required T Function(Purpose marketingCommunication) marketingCommunication,
-  }) {
-    final items = {
-      Purpose.loadTransaction: loadTransaction,
-      Purpose.successfulTransaction: successfulTransaction,
-      Purpose.declinedTransaction: declinedTransaction,
-      Purpose.marketingCommunication: marketingCommunication,
-    };
-    return items[this]!(this);
-  }
-
   T mayBeMap<T>({
-    T Function(Purpose loadTransaction)? loadTransaction,
-    T Function(Purpose successfulTransaction)? successfulTransaction,
-    T Function(Purpose declinedTransaction)? declinedTransaction,
-    T Function(Purpose marketingCommunication)? marketingCommunication,
+    T Function(Purpose)? loadTransaction,
+    T Function(Purpose)? successfulTransaction,
+    T Function(Purpose)? declinedTransaction,
+    T Function(Purpose)? marketingCommunication,
     required T Function() orElse,
   }) {
+    assert(() {
+      if (loadTransaction == null &&
+          successfulTransaction == null &&
+          declinedTransaction == null &&
+          marketingCommunication == null) {
+        throw 'check for at least one case';
+      }
+      return true;
+    }());
     final items = {
       Purpose.loadTransaction: loadTransaction,
       Purpose.successfulTransaction: successfulTransaction,
