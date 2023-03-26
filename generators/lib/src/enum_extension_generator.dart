@@ -1,8 +1,10 @@
-// ignore_for_file: avoid_print, missing_whitespace_between_adjacent_strings, cascade_invocations
+// ignore_for_file: avoid_print, missing_whitespace_between_adjacent_strings, cascade_invocations, avoid_positional_boolean_parameters
 
 import 'package:analyzer/dart/element/element.dart';
+import 'package:annotations/annotations.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
+import 'package:source_gen/source_gen.dart';
 
 class ClassGenerator {
   ClassGenerator(this.element) {
@@ -14,11 +16,12 @@ class ClassGenerator {
 
   String generate() {
     try {
+      final annotation = getAnnotation(element);
       final cls = Extension(
         (c) => c
           ..name = ('Extension${element.name}')
           ..on = Reference(element.name)
-          ..methods.addAll(getAllCheckers(element.name, fields.map((e) => e.name).toList()))
+          ..methods.addAll(getAllCheckers(annotation.hasChecker, element.name, fields.map((e) => e.name).toList()))
           ..methods.add(generateWhenMethod)
           ..methods.add(generateMapMethod)
           ..methods.add(generateMayBeWhenMethod)
@@ -33,18 +36,43 @@ class ClassGenerator {
     }
   }
 
-  static Iterable<Method> getAllCheckers(String elementName, List<String> names) {
-    return names.map(toCamelCase).map((e) {
-      return Method((m) {
-        m
-          ..name = 'is${toPascalCase(e)}'
-          ..lambda = true
-          ..returns = const Reference('bool')
-          ..type = MethodType.getter
-          ..body = Code('this == $elementName.$e')
-          ..build();
-      });
-    });
+  static SteroidsEnum getAnnotation(EnumElement element) {
+    final annotation = const TypeChecker.fromRuntime(SteroidsEnum).firstAnnotationOf(element);
+
+    SteroidsEnum getCore() {
+      final reader = ConstantReader(annotation);
+      final hasChecker = reader.read('hasChecker').literalValue as bool?;
+      final hasWhen = reader.read('hasWhen').literalValue as bool?;
+      final hasMap = reader.read('hasMap').literalValue as bool?;
+      final hasMaybeWhen = reader.read('hasMaybeWhen').literalValue as bool?;
+      final hasMaybeMap = reader.read('hasMaybeMap').literalValue as bool?;
+
+      return SteroidsEnum(
+        hasChecker: hasChecker ?? true,
+        hasWhen: hasWhen ?? true,
+        hasMap: hasMap ?? true,
+        hasMaybeWhen: hasMaybeWhen ?? true,
+        hasMaybeMap: hasMaybeMap ?? true,
+      );
+    }
+
+    return (annotation != null) ? getCore() : const SteroidsEnum();
+  }
+
+  static Iterable<Method> getAllCheckers(bool hasChecker, String elementName, List<String> names) {
+    return hasChecker
+        ? names.map(toCamelCase).map((e) {
+            return Method((m) {
+              m
+                ..name = 'is${toPascalCase(e)}'
+                ..lambda = true
+                ..returns = const Reference('bool')
+                ..type = MethodType.getter
+                ..body = Code('this == $elementName.$e')
+                ..build();
+            });
+          })
+        : <Method>[];
   }
 
   Method get generateMapMethod {
@@ -71,7 +99,6 @@ class ClassGenerator {
         }),
       );
     }
-
     return Method(
       (m) => m
         ..name = 'map'

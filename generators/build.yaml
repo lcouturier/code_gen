@@ -1,8 +1,13 @@
 targets:
   $default:
     builders:
-      generators|annotations:
+      steroidsGenerator:
         enabled: true
+      test_steroids_generator:
+        enabled: false
+        generate_for:
+        - ../test/*
+
 
 builders:
   generators:
@@ -13,3 +18,15 @@ builders:
     auto_apply: dependents
     build_to: cache
     applies_builders: ["source_gen|combining_builder"]
+  test_generators:
+    target: ":generators"
+    import: "package:generators/test_generators.dart"
+    builder_factories: ["myTestClassBuilder"]
+    build_extensions: {".dart": [".steroids.g.dart"]}
+    auto_apply: dependents
+    build_to: cache
+    applies_builders: ["source_gen|combining_builder"]
+    
+
+  
+  

@@ -9,13 +9,11 @@ class SteroidsEnum {
   final bool hasMap;
   final bool hasMaybeWhen;
   final bool hasMaybeMap;
-  final bool hasOnlyWhen;
   const SteroidsEnum({
     this.hasWhen = true,
     this.hasMap = true,
     this.hasMaybeWhen = true,
     this.hasMaybeMap = true,
-    this.hasOnlyWhen = true,
     this.hasChecker = true,
   });
 }

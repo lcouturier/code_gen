@@ -34,7 +34,6 @@ class EnumCodeGenerator {
       final hasMap = reader.read('hasMap').literalValue as bool?;
       final hasMaybeWhen = reader.read('hasMaybeWhen').literalValue as bool?;
       final hasMaybeMap = reader.read('hasMaybeMap').literalValue as bool?;
-      final hasOnlyWhen = reader.read('hasOnlyWhen').literalValue as bool?;
 
       return SteroidsEnum(
         hasChecker: hasChecker ?? true,
@@ -42,7 +41,6 @@ class EnumCodeGenerator {
         hasMap: hasMap ?? true,
         hasMaybeWhen: hasMaybeWhen ?? true,
         hasMaybeMap: hasMaybeMap ?? true,
-        hasOnlyWhen: hasOnlyWhen ?? true,
       );
     }
     return const SteroidsEnum();
@@ -85,9 +83,6 @@ class EnumCodeGenerator {
   void _generateMethods(SteroidsEnum annotation) {
     if (annotation.hasWhen) {
       _when();
-    }
-    if (annotation.hasOnlyWhen) {
-      _onlyWhen();
     }
     if (annotation.hasMaybeWhen) {
       _mayBeWhen();
