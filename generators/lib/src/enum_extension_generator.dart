@@ -69,6 +69,7 @@ class ClassGenerator {
                 ..returns = const Reference('bool')
                 ..type = MethodType.getter
                 ..body = Code('this == $elementName.$e')
+                ..docs.addAll(<String>['/// Is [true] when this is equal to $elementName.$e else [false]'])
                 ..build();
             });
           })
@@ -99,6 +100,7 @@ class ClassGenerator {
         }),
       );
     }
+
     return Method(
       (m) => m
         ..name = 'map'
