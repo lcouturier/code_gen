@@ -7,32 +7,49 @@ part of 'card_status.dart';
 // **************************************************************************
 
 extension ExtensionCardStatus on CardStatus {
-  /// Is [true] when this is equal to CardStatus.active else [false]
+  /// Whether this is equal to  CardStatus.active.
   bool get isActive => this == CardStatus.active;
 
-  /// Is [true] when this is equal to CardStatus.issued else [false]
+  /// Whether this is equal to  CardStatus.issued.
   bool get isIssued => this == CardStatus.issued;
 
-  /// Is [true] when this is equal to CardStatus.blocked else [false]
+  /// Whether this is equal to  CardStatus.blocked.
   bool get isBlocked => this == CardStatus.blocked;
 
-  /// Is [true] when this is equal to CardStatus.lost else [false]
+  /// Whether this is equal to  CardStatus.lost.
   bool get isLost => this == CardStatus.lost;
 
-  /// Is [true] when this is equal to CardStatus.damaged else [false]
+  /// Whether this is equal to  CardStatus.damaged.
   bool get isDamaged => this == CardStatus.damaged;
 
-  /// Is [true] when this is equal to CardStatus.cancelled else [false]
+  /// Whether this is equal to  CardStatus.cancelled.
   bool get isCancelled => this == CardStatus.cancelled;
 
-  /// Is [true] when this is equal to CardStatus.stolen else [false]
+  /// Whether this is equal to  CardStatus.stolen.
   bool get isStolen => this == CardStatus.stolen;
 
-  /// Is [true] when this is equal to CardStatus.pending else [false]
+  /// Whether this is equal to  CardStatus.pending.
   bool get isPending => this == CardStatus.pending;
 
-  /// Is [true] when this is equal to CardStatus.expired else [false]
+  /// Whether this is equal to  CardStatus.expired.
   bool get isExpired => this == CardStatus.expired;
+
+  /// Use when method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// CardStatus value = CardStatus.active;
+  /// final result = value.when(
+  ///  active: () => 'active',
+  ///  issued: () => 'issued',
+  ///  blocked: () => 'blocked',
+  ///  lost: () => 'lost',
+  ///  damaged: () => 'damaged',
+  ///  cancelled: () => 'cancelled',
+  ///  stolen: () => 'stolen',
+  ///  pending: () => 'pending',
+  ///  expired: () => 'expired',
+  /// );
+  /// ```
   T when<T>({
     required T Function() active,
     required T Function() issued,
@@ -66,6 +83,22 @@ extension ExtensionCardStatus on CardStatus {
     }
   }
 
+  /// Use map method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// CardStatus value = CardStatus.active;
+  /// final result = value.map(
+  ///  active: (e) => e.toString(),
+  ///  issued: (e) => e.toString(),
+  ///  blocked: (e) => e.toString(),
+  ///  lost: (e) => e.toString(),
+  ///  damaged: (e) => e.toString(),
+  ///  cancelled: (e) => e.toString(),
+  ///  stolen: (e) => e.toString(),
+  ///  pending: (e) => e.toString(),
+  ///  expired: (e) => e.toString(),
+  /// );
+  /// ```
   T map<T>({
     required T Function(CardStatus) active,
     required T Function(CardStatus) issued,
@@ -99,6 +132,15 @@ extension ExtensionCardStatus on CardStatus {
     }
   }
 
+  /// Use mayBeWhen method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// CardStatus value = CardStatus.active;
+  /// final result = value.mayBeWhen(
+  ///  active: () => 'active',
+  ///  orElse: () => 'default'
+  /// );
+  /// ```
   T mayBeWhen<T>({
     T Function()? active,
     T Function()? issued,
@@ -139,6 +181,15 @@ extension ExtensionCardStatus on CardStatus {
     return items[this]?.call() ?? orElse();
   }
 
+  /// Use mayBeMap method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// CardStatus value = CardStatus.active;
+  /// final result = value.mayBeMap(
+  ///  active: (e) => e.toString(),
+  ///  orElse: () => 'default'
+  /// );
+  /// ```
   T mayBeMap<T>({
     T Function(CardStatus)? active,
     T Function(CardStatus)? issued,

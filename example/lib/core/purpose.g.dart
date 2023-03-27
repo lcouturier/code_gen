@@ -7,17 +7,29 @@ part of 'purpose.dart';
 // **************************************************************************
 
 extension ExtensionPurpose on Purpose {
-  /// Is [true] when this is equal to Purpose.loadTransaction else [false]
+  /// Whether this is equal to  Purpose.loadTransaction.
   bool get isLoadtransaction => this == Purpose.loadTransaction;
 
-  /// Is [true] when this is equal to Purpose.successfulTransaction else [false]
+  /// Whether this is equal to  Purpose.successfulTransaction.
   bool get isSuccessfultransaction => this == Purpose.successfulTransaction;
 
-  /// Is [true] when this is equal to Purpose.declinedTransaction else [false]
+  /// Whether this is equal to  Purpose.declinedTransaction.
   bool get isDeclinedtransaction => this == Purpose.declinedTransaction;
 
-  /// Is [true] when this is equal to Purpose.marketingCommunication else [false]
+  /// Whether this is equal to  Purpose.marketingCommunication.
   bool get isMarketingcommunication => this == Purpose.marketingCommunication;
+
+  /// Use when method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// Purpose value = Purpose.loadTransaction;
+  /// final result = value.when(
+  ///  loadTransaction: () => 'loadTransaction',
+  ///  successfulTransaction: () => 'successfulTransaction',
+  ///  declinedTransaction: () => 'declinedTransaction',
+  ///  marketingCommunication: () => 'marketingCommunication',
+  /// );
+  /// ```
   T when<T>({
     required T Function() loadTransaction,
     required T Function() successfulTransaction,
@@ -36,6 +48,17 @@ extension ExtensionPurpose on Purpose {
     }
   }
 
+  /// Use map method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// Purpose value = Purpose.loadTransaction;
+  /// final result = value.map(
+  ///  loadTransaction: (e) => e.toString(),
+  ///  successfulTransaction: (e) => e.toString(),
+  ///  declinedTransaction: (e) => e.toString(),
+  ///  marketingCommunication: (e) => e.toString(),
+  /// );
+  /// ```
   T map<T>({
     required T Function(Purpose) loadTransaction,
     required T Function(Purpose) successfulTransaction,
@@ -54,6 +77,15 @@ extension ExtensionPurpose on Purpose {
     }
   }
 
+  /// Use mayBeWhen method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// Purpose value = Purpose.loadTransaction;
+  /// final result = value.mayBeWhen(
+  ///  loadTransaction: () => 'loadTransaction',
+  ///  orElse: () => 'default'
+  /// );
+  /// ```
   T mayBeWhen<T>({
     T Function()? loadTransaction,
     T Function()? successfulTransaction,
@@ -79,6 +111,15 @@ extension ExtensionPurpose on Purpose {
     return items[this]?.call() ?? orElse();
   }
 
+  /// Use mayBeMap method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// Purpose value = Purpose.loadTransaction;
+  /// final result = value.mayBeMap(
+  ///  loadTransaction: (e) => e.toString(),
+  ///  orElse: () => 'default'
+  /// );
+  /// ```
   T mayBeMap<T>({
     T Function(Purpose)? loadTransaction,
     T Function(Purpose)? successfulTransaction,

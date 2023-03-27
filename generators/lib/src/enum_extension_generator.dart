@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, missing_whitespace_between_adjacent_strings, cascade_invocations, avoid_positional_boolean_parameters
+// ignore_for_file: avoid_print, missing_whitespace_between_adjacent_strings, cascade_invocations, avoid_positional_boolean_parameters, require_trailing_commas
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:annotations/annotations.dart';
@@ -69,11 +69,34 @@ class ClassGenerator {
                 ..returns = const Reference('bool')
                 ..type = MethodType.getter
                 ..body = Code('this == $elementName.$e')
-                ..docs.addAll(<String>['/// Is [true] when this is equal to $elementName.$e else [false]'])
+                ..docs.addAll(<String>['/// Whether this is equal to  $elementName.$e.'])
                 ..build();
             });
           })
         : <Method>[];
+  }
+
+  static Iterable<String> getComment(
+      {required String method,
+      required bool isMap,
+      required bool isMayBe,
+      required String element,
+      required List<String> fields}) {
+    final header = [
+      "/// Use $method method when you want to perform some action based on the enum",
+      "///",
+      "/// ```dart"
+    ];
+
+    return header +
+        ["/// $element value = $element.${fields.first};"] +
+        ["/// final result = value.$method("] +
+        (isMayBe
+            ? fields.take(1).map((e) => isMap ? "///  $e: (e) => e.toString()," : "///  $e: () => '$e',").toList() +
+                ["///  orElse: () => 'default'"]
+            : fields.map((e) => isMap ? "///  $e: (e) => e.toString()," : "///  $e: () => '$e',").toList()) +
+        ["/// );"] +
+        ["/// ```"];
   }
 
   Method get generateMapMethod {
@@ -108,6 +131,15 @@ class ClassGenerator {
         ..returns = const Reference('T')
         ..optionalParameters.addAll(params)
         ..body = Code(bodyBuffer.toString())
+        ..docs.addAll(
+          getComment(
+            method: 'map',
+            isMap: true,
+            isMayBe: false,
+            element: element.name,
+            fields: fields.map((e) => e.name).toList(),
+          ),
+        )
         ..build(),
     );
   }
@@ -144,6 +176,15 @@ class ClassGenerator {
         ..returns = const Reference('T')
         ..optionalParameters.addAll(params)
         ..body = Code(bodyBuffer.toString())
+        ..docs.addAll(
+          getComment(
+            method: 'when',
+            isMap: false,
+            isMayBe: false,
+            element: element.name,
+            fields: fields.map((e) => e.name).toList(),
+          ),
+        )
         ..build(),
     );
   }
@@ -199,6 +240,15 @@ class ClassGenerator {
         ..returns = const Reference('T')
         ..optionalParameters.addAll(params)
         ..body = Code(bodyBuffer.toString())
+        ..docs.addAll(
+          getComment(
+            method: 'mayBeWhen',
+            isMap: false,
+            isMayBe: true,
+            element: element.name,
+            fields: fields.map((e) => e.name).toList(),
+          ),
+        )
         ..build(),
     );
   }
@@ -253,6 +303,15 @@ class ClassGenerator {
         ..returns = const Reference('T')
         ..optionalParameters.addAll(params)
         ..body = Code(bodyBuffer.toString())
+        ..docs.addAll(
+          getComment(
+            method: 'mayBeMap',
+            isMap: true,
+            isMayBe: true,
+            element: element.name,
+            fields: fields.map((e) => e.name).toList(),
+          ),
+        )
         ..build(),
     );
   }

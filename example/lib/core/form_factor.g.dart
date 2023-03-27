@@ -7,11 +7,15 @@ part of 'form_factor.dart';
 // **************************************************************************
 
 extension ExtensionFormFactor on FormFactor {
-  /// Is [true] when this is equal to FormFactor.plastic else [false]
-  bool get isPlastic => this == FormFactor.plastic;
-
-  /// Is [true] when this is equal to FormFactor.virtual else [false]
-  bool get isVirtual => this == FormFactor.virtual;
+  /// Use when method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// FormFactor value = FormFactor.plastic;
+  /// final result = value.when(
+  ///  plastic: () => 'plastic',
+  ///  virtual: () => 'virtual',
+  /// );
+  /// ```
   T when<T>({
     required T Function() plastic,
     required T Function() virtual,
@@ -24,6 +28,15 @@ extension ExtensionFormFactor on FormFactor {
     }
   }
 
+  /// Use map method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// FormFactor value = FormFactor.plastic;
+  /// final result = value.map(
+  ///  plastic: (e) => e.toString(),
+  ///  virtual: (e) => e.toString(),
+  /// );
+  /// ```
   T map<T>({
     required T Function(FormFactor) plastic,
     required T Function(FormFactor) virtual,
@@ -36,6 +49,15 @@ extension ExtensionFormFactor on FormFactor {
     }
   }
 
+  /// Use mayBeWhen method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// FormFactor value = FormFactor.plastic;
+  /// final result = value.mayBeWhen(
+  ///  plastic: () => 'plastic',
+  ///  orElse: () => 'default'
+  /// );
+  /// ```
   T mayBeWhen<T>({
     T Function()? plastic,
     T Function()? virtual,
@@ -54,6 +76,15 @@ extension ExtensionFormFactor on FormFactor {
     return items[this]?.call() ?? orElse();
   }
 
+  /// Use mayBeMap method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// FormFactor value = FormFactor.plastic;
+  /// final result = value.mayBeMap(
+  ///  plastic: (e) => e.toString(),
+  ///  orElse: () => 'default'
+  /// );
+  /// ```
   T mayBeMap<T>({
     T Function(FormFactor)? plastic,
     T Function(FormFactor)? virtual,

@@ -21,11 +21,21 @@ Map<String, dynamic> _$CardOrderResultDtoToJson(CardOrderResultDto instance) =>
 // **************************************************************************
 
 extension ExtensionState on State {
-  /// Is [true] when this is equal to State.enabled else [false]
+  /// Whether this is equal to  State.enabled.
   bool get isEnabled => this == State.enabled;
 
-  /// Is [true] when this is equal to State.disabled else [false]
+  /// Whether this is equal to  State.disabled.
   bool get isDisabled => this == State.disabled;
+
+  /// Use when method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// State value = State.enabled;
+  /// final result = value.when(
+  ///  enabled: () => 'enabled',
+  ///  disabled: () => 'disabled',
+  /// );
+  /// ```
   T when<T>({
     required T Function() enabled,
     required T Function() disabled,
@@ -38,6 +48,15 @@ extension ExtensionState on State {
     }
   }
 
+  /// Use map method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// State value = State.enabled;
+  /// final result = value.map(
+  ///  enabled: (e) => e.toString(),
+  ///  disabled: (e) => e.toString(),
+  /// );
+  /// ```
   T map<T>({
     required T Function(State) enabled,
     required T Function(State) disabled,
@@ -50,6 +69,15 @@ extension ExtensionState on State {
     }
   }
 
+  /// Use mayBeWhen method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// State value = State.enabled;
+  /// final result = value.mayBeWhen(
+  ///  enabled: () => 'enabled',
+  ///  orElse: () => 'default'
+  /// );
+  /// ```
   T mayBeWhen<T>({
     T Function()? enabled,
     T Function()? disabled,
@@ -68,6 +96,15 @@ extension ExtensionState on State {
     return items[this]?.call() ?? orElse();
   }
 
+  /// Use mayBeMap method when you want to perform some action based on the enum
+  ///
+  /// ```dart
+  /// State value = State.enabled;
+  /// final result = value.mayBeMap(
+  ///  enabled: (e) => e.toString(),
+  ///  orElse: () => 'default'
+  /// );
+  /// ```
   T mayBeMap<T>({
     T Function(State)? enabled,
     T Function(State)? disabled,
