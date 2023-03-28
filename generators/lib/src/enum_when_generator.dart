@@ -13,7 +13,7 @@ class EnumWhenGenerator extends GeneratorForAnnotation<SteroidsEnum> {
   @override
   FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) {
     if (element.kind == ElementKind.ENUM && element is EnumElement) {
-      return ClassGenerator(element).generate();
+      return EnumPatternMatchingCodeGenerator(element).generate();
     } else {
       throw InvalidGenerationSourceError(
         '''@steroids can only be applied on enum types. Instead, you are trying to use is it on a ${element.kind} ${element.name}.''',

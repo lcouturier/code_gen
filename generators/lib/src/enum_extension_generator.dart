@@ -1,13 +1,14 @@
-// ignore_for_file: avoid_print, missing_whitespace_between_adjacent_strings, cascade_invocations, avoid_positional_boolean_parameters, require_trailing_commas
+// ignore_for_file: require_trailing_commas
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:annotations/annotations.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:dart_style/dart_style.dart';
+import 'package:generators/src/core/string_utilities.dart';
 import 'package:source_gen/source_gen.dart';
 
-class ClassGenerator {
-  ClassGenerator(this.element) {
+class EnumPatternMatchingCodeGenerator {
+  EnumPatternMatchingCodeGenerator(this.element) {
     fields = element.fields.where((e) => e.isEnumConstant).toList();
   }
 
@@ -17,22 +18,30 @@ class ClassGenerator {
   String generate() {
     try {
       final annotation = getAnnotation(element);
-      final cls = Extension(
-        (c) => c
+      final cls = Extension((c) {
+        c
           ..name = ('Extension${element.name}')
           ..on = Reference(element.name)
-          ..methods.addAll(getAllCheckers(annotation.hasChecker, element.name, fields.map((e) => e.name).toList()))
-          ..methods.add(generateWhenMethod)
-          ..methods.add(generateMapMethod)
-          ..methods.add(generateMayBeWhenMethod)
-          ..methods.add(generateMayBeMapMethod)
-          ..build(),
-      );
+          ..methods.addAll(getAllCheckers(annotation.hasChecker, element.name, fields.map((e) => e.name).toList()));
+        if (annotation.hasWhen) {
+          c.methods.add(generateWhenMethod);
+        }
+        if (annotation.hasMap) {
+          c.methods.add(generateMapMethod);
+        }
+        if (annotation.hasMaybeWhen) {
+          c.methods.add(generateMayBeWhenMethod);
+        }
+        if (annotation.hasMaybeMap) {
+          c.methods.add(generateMayBeMapMethod);
+        }
+        c.build();
+      });
 
       final emitter = DartEmitter();
       return DartFormatter().format('${cls.accept(emitter)}');
     } catch (e, _) {
-      return "/*$e*/";
+      return '/*$e*/';
     }
   }
 
@@ -59,12 +68,13 @@ class ClassGenerator {
     return (annotation != null) ? getCore() : const SteroidsEnum();
   }
 
+  // ignore: avoid_positional_boolean_parameters
   static Iterable<Method> getAllCheckers(bool hasChecker, String elementName, List<String> names) {
     return hasChecker
-        ? names.map(toCamelCase).map((e) {
+        ? names.map(StringUtilities.toCamelCase).map((e) {
             return Method((m) {
               m
-                ..name = 'is${toPascalCase(e)}'
+                ..name = 'is${StringUtilities.toPascalCase(e)}'
                 ..lambda = true
                 ..returns = const Reference('bool')
                 ..type = MethodType.getter
@@ -83,27 +93,26 @@ class ClassGenerator {
       required String element,
       required List<String> fields}) {
     final header = [
-      "/// Use $method method when you want to perform some action based on the enum",
-      "///",
-      "/// ```dart"
+      '/// Use $method method when you want to perform some action based on the enum',
+      '///',
+      '/// ```dart'
     ];
 
     return header +
-        ["/// $element value = $element.${fields.first};"] +
-        ["/// final result = value.$method("] +
+        ['/// $element value = $element.${fields.first};'] +
+        ['/// final result = value.$method('] +
         (isMayBe
-            ? fields.take(1).map((e) => isMap ? "///  $e: (e) => e.toString()," : "///  $e: () => '$e',").toList() +
+            ? fields.take(1).map((e) => isMap ? '///  $e: (e) => e.toString(),' : "///  $e: () => '$e',").toList() +
                 ["///  orElse: () => 'default'"]
-            : fields.map((e) => isMap ? "///  $e: (e) => e.toString()," : "///  $e: () => '$e',").toList()) +
-        ["/// );"] +
-        ["/// ```"];
+            : fields.map((e) => isMap ? '///  $e: (e) => e.toString(),' : "///  $e: () => '$e',").toList()) +
+        ['/// );'] +
+        ['/// ```'];
   }
 
   Method get generateMapMethod {
-    final params = <Parameter>[];
-    final bodyBuffer = StringBuffer();
-
-    bodyBuffer.writeln('switch(this) {');
+    final bodyBuffer = StringBuffer()
+      ..writeln()
+      ..writeln('switch(this) {');
     for (final field in fields) {
       bodyBuffer
         ..writeln('case ${element.name}.${field.name}:')
@@ -111,11 +120,12 @@ class ClassGenerator {
     }
     bodyBuffer.writeln('}');
 
+    final params = <Parameter>[];
     for (final field in fields) {
       params.add(
         Parameter((p) {
           p
-            ..name = toCamelCase(field.name)
+            ..name = StringUtilities.toCamelCase(field.name)
             ..named = true
             ..required = true
             ..type = refer('T Function(${element.name})')
@@ -145,10 +155,9 @@ class ClassGenerator {
   }
 
   Method get generateWhenMethod {
-    final params = <Parameter>[];
-    final bodyBuffer = StringBuffer();
-
-    bodyBuffer.writeln('switch(this) {');
+    final bodyBuffer = StringBuffer()
+      ..writeln()
+      ..writeln('switch(this) {');
     for (final field in fields) {
       bodyBuffer
         ..writeln('case ${element.name}.${field.name}:')
@@ -156,11 +165,12 @@ class ClassGenerator {
     }
     bodyBuffer.writeln('}');
 
+    final params = <Parameter>[];
     for (final field in fields) {
       params.add(
         Parameter((p) {
           p
-            ..name = toCamelCase(field.name)
+            ..name = StringUtilities.toCamelCase(field.name)
             ..named = true
             ..required = true
             ..type = refer('T Function()')
@@ -190,19 +200,16 @@ class ClassGenerator {
   }
 
   Method get generateMayBeWhenMethod {
-    final params = <Parameter>[];
-    final bodyBuffer = StringBuffer();
+    final assertionCondition = fields.map((f) => '${StringUtilities.toCamelCase(f.name)} == null').join(' && ');
 
-    final assertionCondition = fields.map((f) => '${toCamelCase(f.name)} == null').join(' && ');
-
-    bodyBuffer.write(
-      "assert(() {"
-      "if ($assertionCondition) {throw 'check for at least one case';}"
-      "return true;"
-      "}());",
-    );
-
-    bodyBuffer.writeln('final items = {');
+    final bodyBuffer = StringBuffer()
+      ..write(
+        'assert(() { '
+        "if ($assertionCondition) {throw 'check for at least one case';} "
+        'return true; '
+        '}());',
+      )
+      ..writeln('final items = {');
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name}  : ${field.name},');
     }
@@ -210,11 +217,12 @@ class ClassGenerator {
       ..writeln('};')
       ..writeln('return items[this]?.call() ?? orElse();');
 
+    final params = <Parameter>[];
     for (final field in fields) {
       params.add(
         Parameter((p) {
           p
-            ..name = toCamelCase(field.name)
+            ..name = StringUtilities.toCamelCase(field.name)
             ..named = true
             ..required = false
             ..type = refer('T Function()?')
@@ -254,30 +262,28 @@ class ClassGenerator {
   }
 
   Method get generateMayBeMapMethod {
-    final params = <Parameter>[];
-    final bodyBuffer = StringBuffer();
-
-    final assertionCondition = fields.map((f) => '${toCamelCase(f.name)} == null').join(' && ');
-
-    bodyBuffer.write(
-      "assert(() {"
-      "if ($assertionCondition) {throw 'check for at least one case';}"
-      "return true;"
-      "}());",
-    );
-
-    bodyBuffer.writeln('final items = {');
+    final assertionCondition = fields.map((f) => '${StringUtilities.toCamelCase(f.name)} == null').join(' && ');
+    final bodyBuffer = StringBuffer()
+      ..write(
+        'assert(() { '
+        "if ($assertionCondition) {throw 'check for at least one case';} "
+        'return true; '
+        '}());',
+      )
+      ..writeln('final items = {');
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name}  : ${field.name},');
     }
-    bodyBuffer.writeln('};');
-    bodyBuffer.writeln('return items[this]?.call(this) ?? orElse();');
+    bodyBuffer
+      ..writeln('};')
+      ..writeln('return items[this]?.call(this) ?? orElse();');
 
+    final params = <Parameter>[];
     for (final field in fields) {
       params.add(
         Parameter((p) {
           p
-            ..name = toCamelCase(field.name)
+            ..name = StringUtilities.toCamelCase(field.name)
             ..named = true
             ..required = false
             ..type = refer('T Function(${element.name})?')
@@ -314,24 +320,5 @@ class ClassGenerator {
         )
         ..build(),
     );
-  }
-
-  static String toCamelCase(String str) {
-    if (str.isEmpty) return str;
-
-    final words = str.split(RegExp(r'[_\- ]'));
-    final firstWord = words.removeAt(0);
-    final camelCaseWords = words.map((word) => word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase());
-
-    return '$firstWord${camelCaseWords.join()}';
-  }
-
-  static String toPascalCase(String str) {
-    if (str.isEmpty) return str;
-
-    final words = str.split(RegExp(r'[_\- ]'));
-    final pascalCaseWords = words.map((word) => word.substring(0, 1).toUpperCase() + word.substring(1).toLowerCase());
-
-    return pascalCaseWords.join();
   }
 }
