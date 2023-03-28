@@ -2,8 +2,16 @@ targets:
   $default:
     builders:
       steroidsGenerator:
-        enabled: true      
-      
+        enabled: true
+        options:
+          hasChecker: false
+          hasMaybeMap: false
+        generate_for:
+          include:
+            - example/lib/core/*
+      metadataLibraryBuilder:
+        enabled: false
+
 
 
 builders:
@@ -15,5 +23,9 @@ builders:
     auto_apply: dependents
     build_to: cache
     applies_builders: ["source_gen|combining_builder"]
-  
-  
+  member_count:
+    import: "package:generators/member_count_library_generator.dart"
+    builder_factories: ["metadataLibraryBuilder"]
+    build_extensions: {".dart": [".test.dart"]}
+    auto_apply: dependents
+    build_to: source
