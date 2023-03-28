@@ -29,11 +29,12 @@ extension ExtensionState on State {
 
   /// Use when method when you want to perform some action based on the enum
   ///
+
   /// ```dart
   /// State value = State.enabled;
   /// final result = value.when(
-  ///  enabled: () => 'enabled',
-  ///  disabled: () => 'disabled',
+  ///   enabled: () => 'enabled',
+  ///   disabled: () => 'disabled',
   /// );
   /// ```
   T when<T>({
@@ -50,11 +51,12 @@ extension ExtensionState on State {
 
   /// Use map method when you want to perform some action based on the enum
   ///
+
   /// ```dart
   /// State value = State.enabled;
   /// final result = value.map(
-  ///  enabled: (e) => e.toString(),
-  ///  disabled: (e) => e.toString(),
+  ///   enabled: (e) => e.toString(),
+  ///   disabled: (e) => e.toString(),
   /// );
   /// ```
   T map<T>({
@@ -71,11 +73,12 @@ extension ExtensionState on State {
 
   /// Use mayBeWhen method when you want to perform some action based on the enum
   ///
+  /// Throws an [ArgumentError] if all parameters are null
   /// ```dart
   /// State value = State.enabled;
   /// final result = value.mayBeWhen(
-  ///  enabled: () => 'enabled',
-  ///  orElse: () => 'default'
+  ///   enabled: () => 'enabled',
+  ///   orElse: () => 'default'
   /// );
   /// ```
   T mayBeWhen<T>({
@@ -85,7 +88,7 @@ extension ExtensionState on State {
   }) {
     assert(() {
       if (enabled == null && disabled == null) {
-        throw 'check for at least one case';
+        ArgumentError('check for at least one case');
       }
       return true;
     }());
@@ -98,11 +101,12 @@ extension ExtensionState on State {
 
   /// Use mayBeMap method when you want to perform some action based on the enum
   ///
+  /// Throws an [ArgumentError] if all parameters are null
   /// ```dart
   /// State value = State.enabled;
   /// final result = value.mayBeMap(
-  ///  enabled: (e) => e.toString(),
-  ///  orElse: () => 'default'
+  ///   enabled: (e) => e.toString(),
+  ///   orElse: () => 'default'
   /// );
   /// ```
   T mayBeMap<T>({
@@ -112,7 +116,7 @@ extension ExtensionState on State {
   }) {
     assert(() {
       if (enabled == null && disabled == null) {
-        throw 'check for at least one case';
+        ArgumentError('check for at least one case');
       }
       return true;
     }());

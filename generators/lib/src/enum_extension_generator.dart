@@ -95,6 +95,7 @@ class EnumPatternMatchingCodeGenerator {
     final header = [
       '/// Use $method method when you want to perform some action based on the enum',
       '///',
+      '/// Throws an [ArgumentError] if all parameters are null',
       '/// ```dart'
     ];
 
@@ -102,9 +103,9 @@ class EnumPatternMatchingCodeGenerator {
         ['/// $element value = $element.${fields.first};'] +
         ['/// final result = value.$method('] +
         (isMayBe
-            ? fields.take(1).map((e) => isMap ? '///  $e: (e) => e.toString(),' : "///  $e: () => '$e',").toList() +
-                ["///  orElse: () => 'default'"]
-            : fields.map((e) => isMap ? '///  $e: (e) => e.toString(),' : "///  $e: () => '$e',").toList()) +
+            ? fields.take(1).map((e) => isMap ? '///   $e: (e) => e.toString(),' : "///   $e: () => '$e',").toList() +
+                ["///   orElse: () => 'default'"]
+            : fields.map((e) => isMap ? '///   $e: (e) => e.toString(),' : "///   $e: () => '$e',").toList()) +
         ['/// );'] +
         ['/// ```'];
   }
@@ -205,7 +206,7 @@ class EnumPatternMatchingCodeGenerator {
     final bodyBuffer = StringBuffer()
       ..write(
         'assert(() { '
-        "if ($assertionCondition) {throw 'check for at least one case';} "
+        "if ($assertionCondition) {ArgumentError('check for at least one case');} "
         'return true; '
         '}());',
       )
@@ -266,7 +267,7 @@ class EnumPatternMatchingCodeGenerator {
     final bodyBuffer = StringBuffer()
       ..write(
         'assert(() { '
-        "if ($assertionCondition) {throw 'check for at least one case';} "
+        "if ($assertionCondition) {ArgumentError('check for at least one case');} "
         'return true; '
         '}());',
       )

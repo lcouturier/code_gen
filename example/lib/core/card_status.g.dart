@@ -36,18 +36,19 @@ extension ExtensionCardStatus on CardStatus {
 
   /// Use when method when you want to perform some action based on the enum
   ///
+
   /// ```dart
   /// CardStatus value = CardStatus.active;
   /// final result = value.when(
-  ///  active: () => 'active',
-  ///  issued: () => 'issued',
-  ///  blocked: () => 'blocked',
-  ///  lost: () => 'lost',
-  ///  damaged: () => 'damaged',
-  ///  cancelled: () => 'cancelled',
-  ///  stolen: () => 'stolen',
-  ///  pending: () => 'pending',
-  ///  expired: () => 'expired',
+  ///   active: () => 'active',
+  ///   issued: () => 'issued',
+  ///   blocked: () => 'blocked',
+  ///   lost: () => 'lost',
+  ///   damaged: () => 'damaged',
+  ///   cancelled: () => 'cancelled',
+  ///   stolen: () => 'stolen',
+  ///   pending: () => 'pending',
+  ///   expired: () => 'expired',
   /// );
   /// ```
   T when<T>({
@@ -85,18 +86,19 @@ extension ExtensionCardStatus on CardStatus {
 
   /// Use map method when you want to perform some action based on the enum
   ///
+
   /// ```dart
   /// CardStatus value = CardStatus.active;
   /// final result = value.map(
-  ///  active: (e) => e.toString(),
-  ///  issued: (e) => e.toString(),
-  ///  blocked: (e) => e.toString(),
-  ///  lost: (e) => e.toString(),
-  ///  damaged: (e) => e.toString(),
-  ///  cancelled: (e) => e.toString(),
-  ///  stolen: (e) => e.toString(),
-  ///  pending: (e) => e.toString(),
-  ///  expired: (e) => e.toString(),
+  ///   active: (e) => e.toString(),
+  ///   issued: (e) => e.toString(),
+  ///   blocked: (e) => e.toString(),
+  ///   lost: (e) => e.toString(),
+  ///   damaged: (e) => e.toString(),
+  ///   cancelled: (e) => e.toString(),
+  ///   stolen: (e) => e.toString(),
+  ///   pending: (e) => e.toString(),
+  ///   expired: (e) => e.toString(),
   /// );
   /// ```
   T map<T>({
@@ -134,11 +136,12 @@ extension ExtensionCardStatus on CardStatus {
 
   /// Use mayBeWhen method when you want to perform some action based on the enum
   ///
+  /// Throws an [ArgumentError] if all parameters are null
   /// ```dart
   /// CardStatus value = CardStatus.active;
   /// final result = value.mayBeWhen(
-  ///  active: () => 'active',
-  ///  orElse: () => 'default'
+  ///   active: () => 'active',
+  ///   orElse: () => 'default'
   /// );
   /// ```
   T mayBeWhen<T>({
@@ -163,7 +166,7 @@ extension ExtensionCardStatus on CardStatus {
           stolen == null &&
           pending == null &&
           expired == null) {
-        throw 'check for at least one case';
+        ArgumentError('check for at least one case');
       }
       return true;
     }());
@@ -183,11 +186,12 @@ extension ExtensionCardStatus on CardStatus {
 
   /// Use mayBeMap method when you want to perform some action based on the enum
   ///
+  /// Throws an [ArgumentError] if all parameters are null
   /// ```dart
   /// CardStatus value = CardStatus.active;
   /// final result = value.mayBeMap(
-  ///  active: (e) => e.toString(),
-  ///  orElse: () => 'default'
+  ///   active: (e) => e.toString(),
+  ///   orElse: () => 'default'
   /// );
   /// ```
   T mayBeMap<T>({
@@ -212,7 +216,7 @@ extension ExtensionCardStatus on CardStatus {
           stolen == null &&
           pending == null &&
           expired == null) {
-        throw 'check for at least one case';
+        ArgumentError('check for at least one case');
       }
       return true;
     }());

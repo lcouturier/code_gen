@@ -15,11 +15,12 @@ extension ExtensionFormFactor on FormFactor {
 
   /// Use when method when you want to perform some action based on the enum
   ///
+
   /// ```dart
   /// FormFactor value = FormFactor.plastic;
   /// final result = value.when(
-  ///  plastic: () => 'plastic',
-  ///  virtual: () => 'virtual',
+  ///   plastic: () => 'plastic',
+  ///   virtual: () => 'virtual',
   /// );
   /// ```
   T when<T>({
@@ -36,11 +37,12 @@ extension ExtensionFormFactor on FormFactor {
 
   /// Use map method when you want to perform some action based on the enum
   ///
+
   /// ```dart
   /// FormFactor value = FormFactor.plastic;
   /// final result = value.map(
-  ///  plastic: (e) => e.toString(),
-  ///  virtual: (e) => e.toString(),
+  ///   plastic: (e) => e.toString(),
+  ///   virtual: (e) => e.toString(),
   /// );
   /// ```
   T map<T>({
@@ -57,11 +59,12 @@ extension ExtensionFormFactor on FormFactor {
 
   /// Use mayBeWhen method when you want to perform some action based on the enum
   ///
+  /// Throws an [ArgumentError] if all parameters are null
   /// ```dart
   /// FormFactor value = FormFactor.plastic;
   /// final result = value.mayBeWhen(
-  ///  plastic: () => 'plastic',
-  ///  orElse: () => 'default'
+  ///   plastic: () => 'plastic',
+  ///   orElse: () => 'default'
   /// );
   /// ```
   T mayBeWhen<T>({
@@ -71,7 +74,7 @@ extension ExtensionFormFactor on FormFactor {
   }) {
     assert(() {
       if (plastic == null && virtual == null) {
-        throw 'check for at least one case';
+        ArgumentError('check for at least one case');
       }
       return true;
     }());
@@ -84,11 +87,12 @@ extension ExtensionFormFactor on FormFactor {
 
   /// Use mayBeMap method when you want to perform some action based on the enum
   ///
+  /// Throws an [ArgumentError] if all parameters are null
   /// ```dart
   /// FormFactor value = FormFactor.plastic;
   /// final result = value.mayBeMap(
-  ///  plastic: (e) => e.toString(),
-  ///  orElse: () => 'default'
+  ///   plastic: (e) => e.toString(),
+  ///   orElse: () => 'default'
   /// );
   /// ```
   T mayBeMap<T>({
@@ -98,7 +102,7 @@ extension ExtensionFormFactor on FormFactor {
   }) {
     assert(() {
       if (plastic == null && virtual == null) {
-        throw 'check for at least one case';
+        ArgumentError('check for at least one case');
       }
       return true;
     }());

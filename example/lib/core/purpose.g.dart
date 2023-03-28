@@ -21,13 +21,14 @@ extension ExtensionPurpose on Purpose {
 
   /// Use when method when you want to perform some action based on the enum
   ///
+
   /// ```dart
   /// Purpose value = Purpose.loadTransaction;
   /// final result = value.when(
-  ///  loadTransaction: () => 'loadTransaction',
-  ///  successfulTransaction: () => 'successfulTransaction',
-  ///  declinedTransaction: () => 'declinedTransaction',
-  ///  marketingCommunication: () => 'marketingCommunication',
+  ///   loadTransaction: () => 'loadTransaction',
+  ///   successfulTransaction: () => 'successfulTransaction',
+  ///   declinedTransaction: () => 'declinedTransaction',
+  ///   marketingCommunication: () => 'marketingCommunication',
   /// );
   /// ```
   T when<T>({
@@ -50,13 +51,14 @@ extension ExtensionPurpose on Purpose {
 
   /// Use map method when you want to perform some action based on the enum
   ///
+
   /// ```dart
   /// Purpose value = Purpose.loadTransaction;
   /// final result = value.map(
-  ///  loadTransaction: (e) => e.toString(),
-  ///  successfulTransaction: (e) => e.toString(),
-  ///  declinedTransaction: (e) => e.toString(),
-  ///  marketingCommunication: (e) => e.toString(),
+  ///   loadTransaction: (e) => e.toString(),
+  ///   successfulTransaction: (e) => e.toString(),
+  ///   declinedTransaction: (e) => e.toString(),
+  ///   marketingCommunication: (e) => e.toString(),
   /// );
   /// ```
   T map<T>({
