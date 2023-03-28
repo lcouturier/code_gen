@@ -7,6 +7,12 @@ part of 'form_factor.dart';
 // **************************************************************************
 
 extension ExtensionFormFactor on FormFactor {
+  /// Whether this is equal to  FormFactor.plastic.
+  bool get isPlastic => this == FormFactor.plastic;
+
+  /// Whether this is equal to  FormFactor.virtual.
+  bool get isVirtual => this == FormFactor.virtual;
+
   /// Use when method when you want to perform some action based on the enum
   ///
   /// ```dart
