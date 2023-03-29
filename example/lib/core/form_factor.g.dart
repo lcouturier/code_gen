@@ -74,7 +74,11 @@ extension ExtensionFormFactor on FormFactor {
   }) {
     assert(() {
       if (plastic == null && virtual == null) {
+<<<<<<< HEAD
         ArgumentError('check for at least one case');
+=======
+        throw ArgumentError('check for at least one case');
+>>>>>>> d5fdc4d (fix comment)
       }
       return true;
     }());
@@ -102,7 +106,11 @@ extension ExtensionFormFactor on FormFactor {
   }) {
     assert(() {
       if (plastic == null && virtual == null) {
+<<<<<<< HEAD
         ArgumentError('check for at least one case');
+=======
+        throw ArgumentError('check for at least one case');
+>>>>>>> d5fdc4d (fix comment)
       }
       return true;
     }());

@@ -92,12 +92,14 @@ class EnumPatternMatchingCodeGenerator {
       required bool isMayBe,
       required String element,
       required List<String> fields}) {
-    final header = [
-      '/// Use $method method when you want to perform some action based on the enum',
-      '///',
-      '/// Throws an [ArgumentError] if all parameters are null',
-      '/// ```dart'
-    ];
+    final header = !isMayBe
+        ? ['/// Use $method method when you want to perform some action based on the enum', '///', '/// ```dart']
+        : [
+            '/// Use $method method when you want to perform some action based on the enum',
+            '///',
+            '/// Throws an [ArgumentError] if all parameters are null',
+            '/// ```dart'
+          ];
 
     return header +
         ['/// $element value = $element.${fields.first};'] +
@@ -200,17 +202,19 @@ class EnumPatternMatchingCodeGenerator {
     );
   }
 
-  Method get generateMayBeWhenMethod {
-    final assertionCondition = fields.map((f) => '${StringUtilities.toCamelCase(f.name)} == null').join(' && ');
-
-    final bodyBuffer = StringBuffer()
-      ..write(
-        'assert(() { '
-        "if ($assertionCondition) {ArgumentError('check for at least one case');} "
+  static String _getAssertion(Iterable<String> fields) {
+    final assertionCondition = fields.map((f) => '${StringUtilities.toCamelCase(f)} == null').join(' && ');
+    return 'assert(() { '
+        "if ($assertionCondition) {throw ArgumentError('check for at least one case');} "
         'return true; '
-        '}());',
-      )
+        '}());';
+  }
+
+  Method get generateMayBeWhenMethod {
+    final bodyBuffer = StringBuffer()
+      ..write(_getAssertion(fields.map((e) => e.name)))
       ..writeln('final items = {');
+
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name}  : ${field.name},');
     }
@@ -263,15 +267,10 @@ class EnumPatternMatchingCodeGenerator {
   }
 
   Method get generateMayBeMapMethod {
-    final assertionCondition = fields.map((f) => '${StringUtilities.toCamelCase(f.name)} == null').join(' && ');
     final bodyBuffer = StringBuffer()
-      ..write(
-        'assert(() { '
-        "if ($assertionCondition) {ArgumentError('check for at least one case');} "
-        'return true; '
-        '}());',
-      )
+      ..write(_getAssertion(fields.map((e) => e.name)))
       ..writeln('final items = {');
+
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name}  : ${field.name},');
     }

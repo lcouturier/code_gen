@@ -88,7 +88,11 @@ extension ExtensionState on State {
   }) {
     assert(() {
       if (enabled == null && disabled == null) {
+<<<<<<< HEAD
         ArgumentError('check for at least one case');
+=======
+        throw ArgumentError('check for at least one case');
+>>>>>>> d5fdc4d (fix comment)
       }
       return true;
     }());
@@ -116,7 +120,11 @@ extension ExtensionState on State {
   }) {
     assert(() {
       if (enabled == null && disabled == null) {
+<<<<<<< HEAD
         ArgumentError('check for at least one case');
+=======
+        throw ArgumentError('check for at least one case');
+>>>>>>> d5fdc4d (fix comment)
       }
       return true;
     }());

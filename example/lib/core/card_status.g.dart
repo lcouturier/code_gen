@@ -166,7 +166,11 @@ extension ExtensionCardStatus on CardStatus {
           stolen == null &&
           pending == null &&
           expired == null) {
+<<<<<<< HEAD
         ArgumentError('check for at least one case');
+=======
+        throw ArgumentError('check for at least one case');
+>>>>>>> d5fdc4d (fix comment)
       }
       return true;
     }());
@@ -216,7 +220,11 @@ extension ExtensionCardStatus on CardStatus {
           stolen == null &&
           pending == null &&
           expired == null) {
+<<<<<<< HEAD
         ArgumentError('check for at least one case');
+=======
+        throw ArgumentError('check for at least one case');
+>>>>>>> d5fdc4d (fix comment)
       }
       return true;
     }());
