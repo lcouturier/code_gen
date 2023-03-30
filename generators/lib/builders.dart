@@ -9,7 +9,9 @@ import 'package:source_gen/source_gen.dart';
 
 Builder steroidsBuilder(BuilderOptions options) => SharedPartBuilder([EnumPatternMatchingGenerator()], 'steroids');
 
-Builder metadataLibraryBuilder(BuilderOptions options) => LibraryBuilder(
-      MemberCountLibraryGenerator(),
-      generatedExtension: '.test.dart',
-    );
+Builder unitTestBuilder(BuilderOptions options) {
+  return LibraryBuilder(
+    UnnitTestGenerator(),
+    generatedExtension: '.test.dart',
+  );
+}
