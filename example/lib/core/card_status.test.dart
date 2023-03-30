@@ -4,9 +4,11 @@
 // UnnitTestGenerator
 // **************************************************************************
 
+import 'package:example/core/card_status.dart';
+
 void main() {
   test('when', () {
-    final value = CardStatus.active;
+    const value = CardStatus.active;
     final result = value.when(
       active: () => 'active',
       issued: () => 'issued',
@@ -22,7 +24,7 @@ void main() {
   });
 
   test('map', () {
-    final value = CardStatus.active;
+    const value = CardStatus.active;
     final result = value.map(
       active: (e) => e.toString(),
       issued: (e) => e.toString(),
@@ -38,15 +40,14 @@ void main() {
   });
 
   test('mayBeWhen', () {
-    final value = CardStatus.active;
+    const value = CardStatus.active;
     final result = value.when(active: () => 'active', orElse: () => 'default');
     expect(result, "active");
   });
 
   test('mayBeMap', () {
-    final value = CardStatus.active;
-    final result =
-        value.map(active: (e) => e.toString(), orElse: () => 'default');
+    const value = CardStatus.active;
+    final result = value.map(active: (e) => e.toString(), orElse: () => 'default');
     expect(result, "active");
   });
 }

@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// ignore_for_file: implementation_imports, avoid_positional_boolean_parameters
+// ignore_for_file: implementation_imports, avoid_positional_boolean_parameters, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/src/builder/build_step.dart';
@@ -29,7 +29,7 @@ class UnnitTestGenerator extends Generator {
     final fields = element.fields.where((e) => e.isEnumConstant).map((e) => e.name);
 
     final methodName = isMap ? "map" : "when";
-    final lines = ['final value = ${element.name}.${fields.first};'] +
+    final lines = ['const value = ${element.name}.${fields.first};'] +
         ['final result = value.$methodName('] +
         (isMayBe
             ? fields.take(1).map((e) => isMap ? '$e: (e) => e.toString(),' : "$e: () => '$e',").toList() +

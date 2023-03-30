@@ -6,7 +6,7 @@
 
 void main() {
   test('when', () {
-    final value = Purpose.loadTransaction;
+    const value = Purpose.loadTransaction;
     final result = value.when(
       loadTransaction: () => 'loadTransaction',
       successfulTransaction: () => 'successfulTransaction',
@@ -17,7 +17,7 @@ void main() {
   });
 
   test('map', () {
-    final value = Purpose.loadTransaction;
+    const value = Purpose.loadTransaction;
     final result = value.map(
       loadTransaction: (e) => e.toString(),
       successfulTransaction: (e) => e.toString(),
@@ -28,14 +28,14 @@ void main() {
   });
 
   test('mayBeWhen', () {
-    final value = Purpose.loadTransaction;
+    const value = Purpose.loadTransaction;
     final result = value.when(
         loadTransaction: () => 'loadTransaction', orElse: () => 'default');
     expect(result, "loadTransaction");
   });
 
   test('mayBeMap', () {
-    final value = Purpose.loadTransaction;
+    const value = Purpose.loadTransaction;
     final result = value.map(
         loadTransaction: (e) => e.toString(), orElse: () => 'default');
     expect(result, "loadTransaction");
