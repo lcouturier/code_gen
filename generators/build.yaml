@@ -1,7 +1,7 @@
 targets:
   $default:
     builders:
-      steroidsGenerator:
+      steroidsBuilder:
         enabled: true
         generate_for:
           include:
@@ -12,8 +12,8 @@ targets:
 builders:
   generators:
     target: ":generators"
-    import: "package:generators/generators.dart"
-    builder_factories: ["steroidsGenerator"]
+    import: "package:generators/builders.dart"
+    builder_factories: ["steroidsBuilder"]
     build_extensions: { ".dart": [".steroids.g.dart"] }
     auto_apply: dependents
     build_to: cache

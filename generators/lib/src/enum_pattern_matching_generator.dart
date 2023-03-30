@@ -6,10 +6,10 @@ import 'package:analyzer/dart/element/element.dart';
 import 'package:annotations/annotations.dart';
 import 'package:build/src/builder/build_step.dart';
 
-import 'package:generators/src/enum_extension_generator.dart';
+import 'package:generators/src/enum_pattern_matching_code_generator.dart';
 import 'package:source_gen/source_gen.dart';
 
-class EnumWhenGenerator extends GeneratorForAnnotation<SteroidsEnum> {
+class EnumPatternMatchingGenerator extends GeneratorForAnnotation<SteroidsEnum> {
   @override
   FutureOr<String> generateForAnnotatedElement(Element element, ConstantReader annotation, BuildStep buildStep) {
     if (element.kind == ElementKind.ENUM && element is EnumElement) {
