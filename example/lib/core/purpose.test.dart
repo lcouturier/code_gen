@@ -4,7 +4,9 @@
 // UnnitTestGenerator
 // **************************************************************************
 
-void main() {
+import 'package:example/core/purpose.dart';
+
+void main(List args) {
   test('when', () {
     const value = Purpose.loadTransaction;
     final result = value.when(
@@ -29,15 +31,13 @@ void main() {
 
   test('mayBeWhen', () {
     const value = Purpose.loadTransaction;
-    final result = value.when(
-        loadTransaction: () => 'loadTransaction', orElse: () => 'default');
+    final result = value.when(loadTransaction: () => 'loadTransaction', orElse: () => 'default');
     expect(result, "loadTransaction");
   });
 
   test('mayBeMap', () {
     const value = Purpose.loadTransaction;
-    final result = value.map(
-        loadTransaction: (e) => e.toString(), orElse: () => 'default');
+    final result = value.map(loadTransaction: (e) => e.toString(), orElse: () => 'default');
     expect(result, "loadTransaction");
   });
 }
