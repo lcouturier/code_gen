@@ -76,4 +76,74 @@ extension ExtensionPurpose on Purpose {
         return marketingCommunication(this);
     }
   }
+
+  /// Use mayBeWhen method when you want to perform some action based on the enum
+  ///
+  /// Throws an [ArgumentError] if all parameters are null
+  /// ```dart
+  /// Purpose value = Purpose.loadTransaction;
+  /// final result = value.mayBeWhen(
+  ///   loadTransaction: () => 'loadTransaction',
+  ///   orElse: () => 'default'
+  /// );
+  /// ```
+  T mayBeWhen<T>({
+    T Function()? loadTransaction,
+    T Function()? successfulTransaction,
+    T Function()? declinedTransaction,
+    T Function()? marketingCommunication,
+    required T Function() orElse,
+  }) {
+    assert(() {
+      if (loadTransaction == null &&
+          successfulTransaction == null &&
+          declinedTransaction == null &&
+          marketingCommunication == null) {
+        throw ArgumentError('check for at least one case');
+      }
+      return true;
+    }());
+    final items = {
+      Purpose.loadTransaction: loadTransaction,
+      Purpose.successfulTransaction: successfulTransaction,
+      Purpose.declinedTransaction: declinedTransaction,
+      Purpose.marketingCommunication: marketingCommunication,
+    };
+    return items[this]?.call() ?? orElse();
+  }
+
+  /// Use mayBeMap method when you want to perform some action based on the enum
+  ///
+  /// Throws an [ArgumentError] if all parameters are null
+  /// ```dart
+  /// Purpose value = Purpose.loadTransaction;
+  /// final result = value.mayBeMap(
+  ///   loadTransaction: (e) => e.toString(),
+  ///   orElse: () => 'default'
+  /// );
+  /// ```
+  T mayBeMap<T>({
+    T Function(Purpose)? loadTransaction,
+    T Function(Purpose)? successfulTransaction,
+    T Function(Purpose)? declinedTransaction,
+    T Function(Purpose)? marketingCommunication,
+    required T Function() orElse,
+  }) {
+    assert(() {
+      if (loadTransaction == null &&
+          successfulTransaction == null &&
+          declinedTransaction == null &&
+          marketingCommunication == null) {
+        throw ArgumentError('check for at least one case');
+      }
+      return true;
+    }());
+    final items = {
+      Purpose.loadTransaction: loadTransaction,
+      Purpose.successfulTransaction: successfulTransaction,
+      Purpose.declinedTransaction: declinedTransaction,
+      Purpose.marketingCommunication: marketingCommunication,
+    };
+    return items[this]?.call(this) ?? orElse();
+  }
 }

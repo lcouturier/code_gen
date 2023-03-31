@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// ignore_for_file: implementation_imports, avoid_positional_boolean_parameters, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
+// ignore_for_file: implementation_imports, avoid_positional_boolean_parameters, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, missing_whitespace_between_adjacent_strings
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/src/builder/build_step.dart';
@@ -42,19 +42,42 @@ class UnnitTestGenerator extends Generator {
 
   @override
   String generate(LibraryReader library, BuildStep buildStep) {
-    final enumElements = library.enums.toList();
+    final items = library.enums.toList();
 
-    for (final element in enumElements) {
-      final code = getCode(element);
-      final main = Method((c) {
-        c
-          ..name = 'main'
-          ..returns = refer('void')
-          ..body = code;
-      });
+    for (final element in items) {
+      final mainMethod = MethodBuilder()
+        ..name = 'main'
+        ..returns = refer('void')
+        ..requiredParameters.add(
+          Parameter(
+            (b) => b
+              ..name = 'args'
+              ..type = refer('List')
+              ..types.addAll([refer('String')]),
+          ),
+        )
+        ..body = getCode(element);
+
       final emitter = DartEmitter();
-      return DartFormatter().format('${main.accept(emitter)}');
+      return DartFormatter().format('${mainMethod.build().accept(emitter)}');
     }
+
     return '';
+
+    // final items = library.enums.toList();
+
+    // for (final element in items) {
+    //   final code = getCode(element);
+
+    //   final main = Method((c) {
+    //     c
+    //       ..name = 'main'
+    //       ..returns = refer('void')
+    //       ..body = code;
+    //   });
+    //   final emitter = DartEmitter();
+    //   return DartFormatter().format('${main.accept(emitter)}');
+    // }
+    // return '';
   }
 }

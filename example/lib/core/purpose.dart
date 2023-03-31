@@ -2,7 +2,7 @@ import 'package:annotations/annotations.dart';
 
 part 'purpose.g.dart';
 
-@SteroidsEnum(hasMaybeMap: false, hasMaybeWhen: false)
+@steroids
 enum Purpose {
   loadTransaction,
   successfulTransaction,
