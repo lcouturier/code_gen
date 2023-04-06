@@ -2,12 +2,7 @@ targets:
   $default:
     builders:
       steroidsBuilder:
-        enabled: true
-        generate_for:
-          include:
-            - example/lib/core/*
-      unitTestBuilder:
-        enabled: true
+        enabled: true        
         generate_for:
           include:
             - example/lib/core/*
@@ -20,13 +15,5 @@ builders:
     build_extensions: { ".dart": [".steroids.g.dart"] }
     auto_apply: dependents
     build_to: cache
-    applies_builders: ["source_gen|combining_builder"]
-  unit_test_generators:
-    target: ":generators"
-    import: "package:generators/builders.dart"
-    builder_factories: ["unitTestBuilder"]
-    build_extensions: { ".dart": [".steroids.g.dart"] }
-    auto_apply: dependents
-    build_to: source
     applies_builders: ["source_gen|combining_builder"]
   
