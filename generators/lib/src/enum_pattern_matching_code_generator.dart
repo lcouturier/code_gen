@@ -71,10 +71,10 @@ class EnumPatternMatchingCodeGenerator {
   // ignore: avoid_positional_boolean_parameters
   static Iterable<Method> getAllCheckers(bool hasChecker, String elementName, List<String> names) {
     return hasChecker
-        ? names.map(StringUtilities.toCamelCase).map((e) {
+        ? names.map((e) => e.toCamelCase).map((e) {
             return Method((m) {
               m
-                ..name = 'is${StringUtilities.toPascalCase(e)}'
+                ..name = 'is${e.toPascalCase}'
                 ..lambda = true
                 ..returns = const Reference('bool')
                 ..type = MethodType.getter
@@ -128,7 +128,7 @@ class EnumPatternMatchingCodeGenerator {
       params.add(
         Parameter((p) {
           p
-            ..name = StringUtilities.toCamelCase(field.name)
+            ..name = field.name.toCamelCase
             ..named = true
             ..required = true
             ..type = refer('T Function(${element.name})')
@@ -173,7 +173,7 @@ class EnumPatternMatchingCodeGenerator {
       params.add(
         Parameter((p) {
           p
-            ..name = StringUtilities.toCamelCase(field.name)
+            ..name = field.name.toCamelCase
             ..named = true
             ..required = true
             ..type = refer('T Function()')
@@ -203,7 +203,7 @@ class EnumPatternMatchingCodeGenerator {
   }
 
   static String _getAssertion(Iterable<String> fields) {
-    final assertionCondition = fields.map((f) => '${StringUtilities.toCamelCase(f)} == null').join(' && ');
+    final assertionCondition = fields.map((f) => '${f.toCamelCase} == null').join(' && ');
     return 'assert(() { '
         "if ($assertionCondition) {throw ArgumentError('check for at least one case');} "
         'return true; '
@@ -227,7 +227,7 @@ class EnumPatternMatchingCodeGenerator {
       params.add(
         Parameter((p) {
           p
-            ..name = StringUtilities.toCamelCase(field.name)
+            ..name = field.name.toCamelCase
             ..named = true
             ..required = false
             ..type = refer('T Function()?')
@@ -283,7 +283,7 @@ class EnumPatternMatchingCodeGenerator {
       params.add(
         Parameter((p) {
           p
-            ..name = StringUtilities.toCamelCase(field.name)
+            ..name = field.name.toCamelCase
             ..named = true
             ..required = false
             ..type = refer('T Function(${element.name})?')
