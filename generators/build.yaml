@@ -1,16 +1,25 @@
 targets:
   $default:
     builders:
-
       generators|annotations: # generators|annotations: Refers to the simple_generator builder when dealing with files annotated with annotations.
         enabled: true
+      generators|unit_test_generator:
+        enabled: true
+
 builders:
   enum_generators:
     target: ":generators"
     import: "package:generators/builders.dart"
     builder_factories: ["steroidsBuilder"]
-
     build_extensions: { ".dart": [".g.part"] }
     auto_apply: dependents
     build_to: cache
     applies_builders: ["source_gen|combining_builder"]
+
+  unit_test_generator:
+    target: ":generators"
+    import: "package:generators/builders.dart"
+    builder_factories: ["unitTestBuilder"]
+    build_extensions: { ".dart": [".test.dart"] }
+    auto_apply: dependents
+    build_to: cache
