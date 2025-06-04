@@ -3,13 +3,13 @@
 import 'package:meta/meta_meta.dart';
 
 @Target({TargetKind.enumType})
-class SteroidsEnum {
+class EnumExtension {
   final bool hasChecker;
   final bool hasWhen;
   final bool hasMap;
   final bool hasMaybeWhen;
   final bool hasMaybeMap;
-  const SteroidsEnum({
+  const EnumExtension({
     this.hasWhen = true,
     this.hasMap = true,
     this.hasMaybeWhen = true,
@@ -18,4 +18,4 @@ class SteroidsEnum {
   });
 }
 
-const steroids = SteroidsEnum();
+const enumExtension = EnumExtension();

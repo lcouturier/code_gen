@@ -2,7 +2,7 @@ import 'package:annotations/annotations.dart';
 
 part 'purpose.g.dart';
 
-@steroids
+@enumExtension
 enum Purpose {
   loadTransaction,
   successfulTransaction,
