@@ -47,6 +47,7 @@ extension ExtensionCardStatus on CardStatus {
     return CardStatus.values[value];
   }
 
+
   /// Use when method when you want to perform some action based on the enum
   ///
   /// ```dart
@@ -74,6 +75,7 @@ extension ExtensionCardStatus on CardStatus {
     required T Function() pending,
     required T Function() expired,
   }) {
+
     return switch (this) {
       CardStatus.active => active(),
       CardStatus.issued => issued(),
@@ -114,6 +116,7 @@ extension ExtensionCardStatus on CardStatus {
     required T Function(CardStatus) pending,
     required T Function(CardStatus) expired,
   }) {
+
     return switch (this) {
       CardStatus.active => active(this),
       CardStatus.issued => issued(this),

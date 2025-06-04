@@ -1,6 +1,7 @@
 targets:
   $default:
     builders:
+
       generators|annotations: # generators|annotations: Refers to the simple_generator builder when dealing with files annotated with annotations.
         enabled: true
 builders:
@@ -8,6 +9,7 @@ builders:
     target: ":generators"
     import: "package:generators/builders.dart"
     builder_factories: ["steroidsBuilder"]
+
     build_extensions: { ".dart": [".g.part"] }
     auto_apply: dependents
     build_to: cache

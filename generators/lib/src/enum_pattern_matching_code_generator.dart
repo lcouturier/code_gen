@@ -22,6 +22,7 @@ class EnumPatternMatchingCodeGenerator {
         c
           ..name = ('Extension${element.name}')
           ..on = Reference(element.name)
+
           ..methods.addAll(getAllCheckers(annotation.hasChecker, element.name, fields.map((e) => e.name).toList()))
           ..methods.add(generateFromNameMethod)
           ..methods.add(generateFromOrdinalMethod);
@@ -46,6 +47,7 @@ class EnumPatternMatchingCodeGenerator {
       return '/*$e*/';
     }
   }
+
 
   Method get generateFromOrdinalMethod {
     final bodyBuffer = StringBuffer()
@@ -101,6 +103,7 @@ class EnumPatternMatchingCodeGenerator {
         ..build(),
     );
   }
+
 
   static SteroidsEnum getAnnotation(EnumElement element) {
     final annotation = const TypeChecker.fromRuntime(SteroidsEnum).firstAnnotationOf(element);
@@ -172,12 +175,12 @@ class EnumPatternMatchingCodeGenerator {
   Method get generateMapMethod {
     final bodyBuffer = StringBuffer()
       ..writeln()
+
       ..writeln('return switch(this) {');
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name} => ${field.name}(this),');
     }
     bodyBuffer.writeln('};');
-
     final params = <Parameter>[];
     for (final field in fields) {
       params.add(
@@ -254,6 +257,7 @@ class EnumPatternMatchingCodeGenerator {
         ..build(),
     );
   }
+
 
   Method get generateMayBeWhenMethod {
     final bodyBuffer = StringBuffer()

@@ -19,6 +19,7 @@ extension ExtensionPurpose on Purpose {
   /// Whether this is equal to  Purpose.marketingCommunication.
   bool get isMarketingcommunication => this == Purpose.marketingCommunication;
 
+
   /// Whether this is equal to  Purpose.customerSupport.
   bool get isCustomersupport => this == Purpose.customerSupport;
 
@@ -62,6 +63,7 @@ extension ExtensionPurpose on Purpose {
     return Purpose.values[value];
   }
 
+
   /// Use when method when you want to perform some action based on the enum
   ///
   /// ```dart
@@ -71,6 +73,7 @@ extension ExtensionPurpose on Purpose {
   ///   successfulTransaction: () => 'successfulTransaction',
   ///   declinedTransaction: () => 'declinedTransaction',
   ///   marketingCommunication: () => 'marketingCommunication',
+
   ///   customerSupport: () => 'customerSupport',
   ///   fraudDetection: () => 'fraudDetection',
   ///   accountManagement: () => 'accountManagement',
@@ -88,6 +91,7 @@ extension ExtensionPurpose on Purpose {
     required T Function() successfulTransaction,
     required T Function() declinedTransaction,
     required T Function() marketingCommunication,
+
     required T Function() customerSupport,
     required T Function() fraudDetection,
     required T Function() accountManagement,
@@ -115,6 +119,7 @@ extension ExtensionPurpose on Purpose {
       Purpose.performanceOptimization => performanceOptimization(),
       Purpose.featureDevelopment => featureDevelopment(),
     };
+
   }
 
   /// Use map method when you want to perform some action based on the enum
@@ -126,6 +131,7 @@ extension ExtensionPurpose on Purpose {
   ///   successfulTransaction: (e) => e.toString(),
   ///   declinedTransaction: (e) => e.toString(),
   ///   marketingCommunication: (e) => e.toString(),
+
   ///   customerSupport: (e) => e.toString(),
   ///   fraudDetection: (e) => e.toString(),
   ///   accountManagement: (e) => e.toString(),
@@ -143,6 +149,7 @@ extension ExtensionPurpose on Purpose {
     required T Function(Purpose) successfulTransaction,
     required T Function(Purpose) declinedTransaction,
     required T Function(Purpose) marketingCommunication,
+
     required T Function(Purpose) customerSupport,
     required T Function(Purpose) fraudDetection,
     required T Function(Purpose) accountManagement,
@@ -187,6 +194,7 @@ extension ExtensionPurpose on Purpose {
     T Function()? successfulTransaction,
     T Function()? declinedTransaction,
     T Function()? marketingCommunication,
+
     T Function()? customerSupport,
     T Function()? fraudDetection,
     T Function()? accountManagement,
@@ -204,6 +212,7 @@ extension ExtensionPurpose on Purpose {
       Purpose.successfulTransaction: successfulTransaction,
       Purpose.declinedTransaction: declinedTransaction,
       Purpose.marketingCommunication: marketingCommunication,
+
       Purpose.customerSupport: customerSupport,
       Purpose.fraudDetection: fraudDetection,
       Purpose.accountManagement: accountManagement,

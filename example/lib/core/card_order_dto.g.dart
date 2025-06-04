@@ -26,6 +26,7 @@ extension ExtensionState on State {
 
   /// Whether this is equal to  State.disabled.
   bool get isDisabled => this == State.disabled;
+
   static State fromName(String value) {
     return State.values.firstWhere(
       (e) => e.name.toLowerCase() == value.toLowerCase(),
@@ -49,6 +50,7 @@ extension ExtensionState on State {
   ///   disabled: () => 'disabled',
   /// );
   /// ```
+
   T when<T>({required T Function() enabled, required T Function() disabled}) {
     return switch (this) {
       State.enabled => enabled(),
@@ -69,6 +71,7 @@ extension ExtensionState on State {
     required T Function(State) enabled,
     required T Function(State) disabled,
   }) {
+
     return switch (this) {
       State.enabled => enabled(this),
       State.disabled => disabled(this),
@@ -90,6 +93,7 @@ extension ExtensionState on State {
     T Function()? disabled,
     required T Function() orElse,
   }) {
+
     final items = {State.enabled: enabled, State.disabled: disabled};
     return items[this]?.call() ?? orElse();
   }
@@ -109,6 +113,7 @@ extension ExtensionState on State {
     T Function(State)? disabled,
     required T Function() orElse,
   }) {
+
     final items = {State.enabled: enabled, State.disabled: disabled};
     return items[this]?.call(this) ?? orElse();
   }

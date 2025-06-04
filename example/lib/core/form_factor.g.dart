@@ -12,6 +12,7 @@ extension ExtensionFormFactor on FormFactor {
 
   /// Whether this is equal to  FormFactor.virtual.
   bool get isVirtual => this == FormFactor.virtual;
+
   static FormFactor fromName(String value) {
     return FormFactor.values.firstWhere(
       (e) => e.name.toLowerCase() == value.toLowerCase(),
@@ -35,6 +36,7 @@ extension ExtensionFormFactor on FormFactor {
   ///   virtual: () => 'virtual',
   /// );
   /// ```
+
   T when<T>({required T Function() plastic, required T Function() virtual}) {
     return switch (this) {
       FormFactor.plastic => plastic(),
@@ -55,6 +57,7 @@ extension ExtensionFormFactor on FormFactor {
     required T Function(FormFactor) plastic,
     required T Function(FormFactor) virtual,
   }) {
+
     return switch (this) {
       FormFactor.plastic => plastic(this),
       FormFactor.virtual => virtual(this),
@@ -76,6 +79,7 @@ extension ExtensionFormFactor on FormFactor {
     T Function()? virtual,
     required T Function() orElse,
   }) {
+
     final items = {FormFactor.plastic: plastic, FormFactor.virtual: virtual};
     return items[this]?.call() ?? orElse();
   }
@@ -95,6 +99,7 @@ extension ExtensionFormFactor on FormFactor {
     T Function(FormFactor)? virtual,
     required T Function() orElse,
   }) {
+
     final items = {FormFactor.plastic: plastic, FormFactor.virtual: virtual};
     return items[this]?.call(this) ?? orElse();
   }
