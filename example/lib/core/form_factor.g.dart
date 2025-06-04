@@ -13,6 +13,20 @@ extension ExtensionFormFactor on FormFactor {
   /// Whether this is equal to  FormFactor.virtual.
   bool get isVirtual => this == FormFactor.virtual;
 
+  static FormFactor fromName(String value) {
+    return FormFactor.values.firstWhere(
+      (e) => e.name.toLowerCase() == value.toLowerCase(),
+      orElse: () => throw ArgumentError("Invalid FormFactor value"),
+    );
+  }
+
+  static FormFactor fromOrdinal(int value) {
+    if (value < 0 || value >= FormFactor.values.length) {
+      throw ArgumentError("Invalid FormFactor value");
+    }
+    return FormFactor.values[value];
+  }
+
   /// Use when method when you want to perform some action based on the enum
   ///
   /// ```dart
@@ -22,16 +36,12 @@ extension ExtensionFormFactor on FormFactor {
   ///   virtual: () => 'virtual',
   /// );
   /// ```
-  T when<T>({
-    required T Function() plastic,
-    required T Function() virtual,
-  }) {
-    switch (this) {
-      case FormFactor.plastic:
-        return plastic();
-      case FormFactor.virtual:
-        return virtual();
-    }
+
+  T when<T>({required T Function() plastic, required T Function() virtual}) {
+    return switch (this) {
+      FormFactor.plastic => plastic(),
+      FormFactor.virtual => virtual(),
+    };
   }
 
   /// Use map method when you want to perform some action based on the enum
@@ -47,12 +57,11 @@ extension ExtensionFormFactor on FormFactor {
     required T Function(FormFactor) plastic,
     required T Function(FormFactor) virtual,
   }) {
-    switch (this) {
-      case FormFactor.plastic:
-        return plastic(this);
-      case FormFactor.virtual:
-        return virtual(this);
-    }
+
+    return switch (this) {
+      FormFactor.plastic => plastic(this),
+      FormFactor.virtual => virtual(this),
+    };
   }
 
   /// Use mayBeWhen method when you want to perform some action based on the enum
@@ -70,16 +79,8 @@ extension ExtensionFormFactor on FormFactor {
     T Function()? virtual,
     required T Function() orElse,
   }) {
-    assert(() {
-      if (plastic == null && virtual == null) {
-        throw ArgumentError('check for at least one case');
-      }
-      return true;
-    }());
-    final items = {
-      FormFactor.plastic: plastic,
-      FormFactor.virtual: virtual,
-    };
+
+    final items = {FormFactor.plastic: plastic, FormFactor.virtual: virtual};
     return items[this]?.call() ?? orElse();
   }
 
@@ -98,16 +99,8 @@ extension ExtensionFormFactor on FormFactor {
     T Function(FormFactor)? virtual,
     required T Function() orElse,
   }) {
-    assert(() {
-      if (plastic == null && virtual == null) {
-        throw ArgumentError('check for at least one case');
-      }
-      return true;
-    }());
-    final items = {
-      FormFactor.plastic: plastic,
-      FormFactor.virtual: virtual,
-    };
+
+    final items = {FormFactor.plastic: plastic, FormFactor.virtual: virtual};
     return items[this]?.call(this) ?? orElse();
   }
 }

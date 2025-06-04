@@ -27,6 +27,20 @@ extension ExtensionState on State {
   /// Whether this is equal to  State.disabled.
   bool get isDisabled => this == State.disabled;
 
+  static State fromName(String value) {
+    return State.values.firstWhere(
+      (e) => e.name.toLowerCase() == value.toLowerCase(),
+      orElse: () => throw ArgumentError("Invalid State value"),
+    );
+  }
+
+  static State fromOrdinal(int value) {
+    if (value < 0 || value >= State.values.length) {
+      throw ArgumentError("Invalid State value");
+    }
+    return State.values[value];
+  }
+
   /// Use when method when you want to perform some action based on the enum
   ///
   /// ```dart
@@ -36,16 +50,12 @@ extension ExtensionState on State {
   ///   disabled: () => 'disabled',
   /// );
   /// ```
-  T when<T>({
-    required T Function() enabled,
-    required T Function() disabled,
-  }) {
-    switch (this) {
-      case State.enabled:
-        return enabled();
-      case State.disabled:
-        return disabled();
-    }
+
+  T when<T>({required T Function() enabled, required T Function() disabled}) {
+    return switch (this) {
+      State.enabled => enabled(),
+      State.disabled => disabled(),
+    };
   }
 
   /// Use map method when you want to perform some action based on the enum
@@ -61,12 +71,11 @@ extension ExtensionState on State {
     required T Function(State) enabled,
     required T Function(State) disabled,
   }) {
-    switch (this) {
-      case State.enabled:
-        return enabled(this);
-      case State.disabled:
-        return disabled(this);
-    }
+
+    return switch (this) {
+      State.enabled => enabled(this),
+      State.disabled => disabled(this),
+    };
   }
 
   /// Use mayBeWhen method when you want to perform some action based on the enum
@@ -84,16 +93,8 @@ extension ExtensionState on State {
     T Function()? disabled,
     required T Function() orElse,
   }) {
-    assert(() {
-      if (enabled == null && disabled == null) {
-        throw ArgumentError('check for at least one case');
-      }
-      return true;
-    }());
-    final items = {
-      State.enabled: enabled,
-      State.disabled: disabled,
-    };
+
+    final items = {State.enabled: enabled, State.disabled: disabled};
     return items[this]?.call() ?? orElse();
   }
 
@@ -112,16 +113,8 @@ extension ExtensionState on State {
     T Function(State)? disabled,
     required T Function() orElse,
   }) {
-    assert(() {
-      if (enabled == null && disabled == null) {
-        throw ArgumentError('check for at least one case');
-      }
-      return true;
-    }());
-    final items = {
-      State.enabled: enabled,
-      State.disabled: disabled,
-    };
+
+    final items = {State.enabled: enabled, State.disabled: disabled};
     return items[this]?.call(this) ?? orElse();
   }
 }

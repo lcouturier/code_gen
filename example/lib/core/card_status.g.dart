@@ -33,6 +33,20 @@ extension ExtensionCardStatus on CardStatus {
 
   /// Whether this is equal to  CardStatus.expired.
   bool get isExpired => this == CardStatus.expired;
+  static CardStatus fromName(String value) {
+    return CardStatus.values.firstWhere(
+      (e) => e.name.toLowerCase() == value.toLowerCase(),
+      orElse: () => throw ArgumentError("Invalid CardStatus value"),
+    );
+  }
+
+  static CardStatus fromOrdinal(int value) {
+    if (value < 0 || value >= CardStatus.values.length) {
+      throw ArgumentError("Invalid CardStatus value");
+    }
+    return CardStatus.values[value];
+  }
+
 
   /// Use when method when you want to perform some action based on the enum
   ///
@@ -61,26 +75,18 @@ extension ExtensionCardStatus on CardStatus {
     required T Function() pending,
     required T Function() expired,
   }) {
-    switch (this) {
-      case CardStatus.active:
-        return active();
-      case CardStatus.issued:
-        return issued();
-      case CardStatus.blocked:
-        return blocked();
-      case CardStatus.lost:
-        return lost();
-      case CardStatus.damaged:
-        return damaged();
-      case CardStatus.cancelled:
-        return cancelled();
-      case CardStatus.stolen:
-        return stolen();
-      case CardStatus.pending:
-        return pending();
-      case CardStatus.expired:
-        return expired();
-    }
+
+    return switch (this) {
+      CardStatus.active => active(),
+      CardStatus.issued => issued(),
+      CardStatus.blocked => blocked(),
+      CardStatus.lost => lost(),
+      CardStatus.damaged => damaged(),
+      CardStatus.cancelled => cancelled(),
+      CardStatus.stolen => stolen(),
+      CardStatus.pending => pending(),
+      CardStatus.expired => expired(),
+    };
   }
 
   /// Use map method when you want to perform some action based on the enum
@@ -110,26 +116,18 @@ extension ExtensionCardStatus on CardStatus {
     required T Function(CardStatus) pending,
     required T Function(CardStatus) expired,
   }) {
-    switch (this) {
-      case CardStatus.active:
-        return active(this);
-      case CardStatus.issued:
-        return issued(this);
-      case CardStatus.blocked:
-        return blocked(this);
-      case CardStatus.lost:
-        return lost(this);
-      case CardStatus.damaged:
-        return damaged(this);
-      case CardStatus.cancelled:
-        return cancelled(this);
-      case CardStatus.stolen:
-        return stolen(this);
-      case CardStatus.pending:
-        return pending(this);
-      case CardStatus.expired:
-        return expired(this);
-    }
+
+    return switch (this) {
+      CardStatus.active => active(this),
+      CardStatus.issued => issued(this),
+      CardStatus.blocked => blocked(this),
+      CardStatus.lost => lost(this),
+      CardStatus.damaged => damaged(this),
+      CardStatus.cancelled => cancelled(this),
+      CardStatus.stolen => stolen(this),
+      CardStatus.pending => pending(this),
+      CardStatus.expired => expired(this),
+    };
   }
 
   /// Use mayBeWhen method when you want to perform some action based on the enum
@@ -154,20 +152,6 @@ extension ExtensionCardStatus on CardStatus {
     T Function()? expired,
     required T Function() orElse,
   }) {
-    assert(() {
-      if (active == null &&
-          issued == null &&
-          blocked == null &&
-          lost == null &&
-          damaged == null &&
-          cancelled == null &&
-          stolen == null &&
-          pending == null &&
-          expired == null) {
-        throw ArgumentError('check for at least one case');
-      }
-      return true;
-    }());
     final items = {
       CardStatus.active: active,
       CardStatus.issued: issued,
@@ -204,20 +188,6 @@ extension ExtensionCardStatus on CardStatus {
     T Function(CardStatus)? expired,
     required T Function() orElse,
   }) {
-    assert(() {
-      if (active == null &&
-          issued == null &&
-          blocked == null &&
-          lost == null &&
-          damaged == null &&
-          cancelled == null &&
-          stolen == null &&
-          pending == null &&
-          expired == null) {
-        throw ArgumentError('check for at least one case');
-      }
-      return true;
-    }());
     final items = {
       CardStatus.active: active,
       CardStatus.issued: issued,

@@ -1,4 +1,4 @@
-// ignore_for_file: require_trailing_commas
+// ignore_for_file: require_trailing_commas, deprecated_member_use
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:annotations/annotations.dart';
@@ -22,7 +22,10 @@ class EnumPatternMatchingCodeGenerator {
         c
           ..name = ('Extension${element.name}')
           ..on = Reference(element.name)
-          ..methods.addAll(getAllCheckers(annotation.hasChecker, element.name, fields.map((e) => e.name).toList()));
+
+          ..methods.addAll(getAllCheckers(annotation.hasChecker, element.name, fields.map((e) => e.name).toList()))
+          ..methods.add(generateFromNameMethod)
+          ..methods.add(generateFromOrdinalMethod);
         if (annotation.hasWhen) {
           c.methods.add(generateWhenMethod);
         }
@@ -39,11 +42,68 @@ class EnumPatternMatchingCodeGenerator {
       });
 
       final emitter = DartEmitter();
-      return DartFormatter().format('${cls.accept(emitter)}');
+      return DartFormatter(languageVersion: DartFormatter.latestLanguageVersion).format('${cls.accept(emitter)}');
     } catch (e, _) {
       return '/*$e*/';
     }
   }
+
+
+  Method get generateFromOrdinalMethod {
+    final bodyBuffer = StringBuffer()
+      ..writeln('if (value < 0 || value >= ${element.name}.values.length) {')
+      ..writeln('  throw ArgumentError("Invalid ${element.name} value");')
+      ..writeln('}')
+      ..writeln('return ${element.name}.values[value];');
+
+    final params = <Parameter>[];
+    params.add(
+      Parameter((p) {
+        p
+          ..name = 'value'
+          ..type = refer('int')
+          ..build();
+      }),
+    );
+
+    return Method(
+      (m) => m
+        ..name = 'fromOrdinal'
+        ..requiredParameters.addAll(params)
+        ..returns = Reference('${element.name}')
+        ..body = Code(bodyBuffer.toString())
+        ..static = true
+        ..build(),
+    );
+  }
+
+  Method get generateFromNameMethod {
+    final bodyBuffer = StringBuffer()
+      ..writeln('return ${element.name}.values.firstWhere(')
+      ..writeln('(e) => e.name.toLowerCase() == value.toLowerCase(),')
+      ..writeln('orElse: () => throw ArgumentError("Invalid ${element.name} value"));');
+
+    final params = <Parameter>[];
+    params.add(
+      Parameter((p) {
+        p
+          ..name = 'value'
+          ..type = refer('String')
+          ..build();
+      }),
+    );
+
+    return Method(
+      (m) => m
+        ..name = 'fromName'
+        ..requiredParameters.addAll(params)
+        ..returns = Reference('${element.name}')
+        ..body = Code(bodyBuffer.toString())
+        ..static = true
+        ..build(),
+    );
+  }
+
 
   static SteroidsEnum getAnnotation(EnumElement element) {
     final annotation = const TypeChecker.fromRuntime(SteroidsEnum).firstAnnotationOf(element);
@@ -115,14 +175,12 @@ class EnumPatternMatchingCodeGenerator {
   Method get generateMapMethod {
     final bodyBuffer = StringBuffer()
       ..writeln()
-      ..writeln('switch(this) {');
-    for (final field in fields) {
-      bodyBuffer
-        ..writeln('case ${element.name}.${field.name}:')
-        ..writeln('return ${field.name}(this);');
-    }
-    bodyBuffer.writeln('}');
 
+      ..writeln('return switch(this) {');
+    for (final field in fields) {
+      bodyBuffer.writeln('${element.name}.${field.name} => ${field.name}(this),');
+    }
+    bodyBuffer.writeln('};');
     final params = <Parameter>[];
     for (final field in fields) {
       params.add(
@@ -160,13 +218,11 @@ class EnumPatternMatchingCodeGenerator {
   Method get generateWhenMethod {
     final bodyBuffer = StringBuffer()
       ..writeln()
-      ..writeln('switch(this) {');
+      ..writeln('return switch(this) {');
     for (final field in fields) {
-      bodyBuffer
-        ..writeln('case ${element.name}.${field.name}:')
-        ..writeln('return ${field.name}();');
+      bodyBuffer.writeln('${element.name}.${field.name} => ${field.name}(),');
     }
-    bodyBuffer.writeln('}');
+    bodyBuffer.writeln('};');
 
     final params = <Parameter>[];
     for (final field in fields) {
@@ -202,17 +258,10 @@ class EnumPatternMatchingCodeGenerator {
     );
   }
 
-  static String _getAssertion(Iterable<String> fields) {
-    final assertionCondition = fields.map((f) => '${f.toCamelCase} == null').join(' && ');
-    return 'assert(() { '
-        "if ($assertionCondition) {throw ArgumentError('check for at least one case');} "
-        'return true; '
-        '}());';
-  }
 
   Method get generateMayBeWhenMethod {
     final bodyBuffer = StringBuffer()
-      ..write(_getAssertion(fields.map((e) => e.name)))
+      //..write(_getAssertion(fields.map((e) => e.name)))
       ..writeln('final items = {');
 
     for (final field in fields) {
@@ -268,7 +317,7 @@ class EnumPatternMatchingCodeGenerator {
 
   Method get generateMayBeMapMethod {
     final bodyBuffer = StringBuffer()
-      ..write(_getAssertion(fields.map((e) => e.name)))
+      // ..write(_getAssertion(fields.map((e) => e.name)))
       ..writeln('final items = {');
 
     for (final field in fields) {

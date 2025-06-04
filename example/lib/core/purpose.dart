@@ -8,4 +8,15 @@ enum Purpose {
   successfulTransaction,
   declinedTransaction,
   marketingCommunication,
+
+  customerSupport,
+  fraudDetection,
+  accountManagement,
+  dataAnalysis,
+  userFeedback,
+  securityMonitoring,
+  compliance,
+  systemMaintenance,
+  performanceOptimization,
+  featureDevelopment,
 }
