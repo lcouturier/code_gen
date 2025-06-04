@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'card_order_dto.g.dart';
 
-@steroids
+@enumExtension
 enum State { enabled, disabled }
 
 @JsonSerializable()

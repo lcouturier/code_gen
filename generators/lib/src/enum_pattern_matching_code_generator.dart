@@ -22,7 +22,6 @@ class EnumPatternMatchingCodeGenerator {
         c
           ..name = ('Extension${element.name}')
           ..on = Reference(element.name)
-
           ..methods.addAll(getAllCheckers(annotation.hasChecker, element.name, fields.map((e) => e.name).toList()))
           ..methods.add(generateFromNameMethod)
           ..methods.add(generateFromOrdinalMethod);
@@ -47,7 +46,6 @@ class EnumPatternMatchingCodeGenerator {
       return '/*$e*/';
     }
   }
-
 
   Method get generateFromOrdinalMethod {
     final bodyBuffer = StringBuffer()
@@ -104,11 +102,10 @@ class EnumPatternMatchingCodeGenerator {
     );
   }
 
+  static EnumExtension getAnnotation(EnumElement element) {
+    final annotation = const TypeChecker.fromRuntime(EnumExtension).firstAnnotationOf(element);
 
-  static SteroidsEnum getAnnotation(EnumElement element) {
-    final annotation = const TypeChecker.fromRuntime(SteroidsEnum).firstAnnotationOf(element);
-
-    SteroidsEnum getCore() {
+    EnumExtension getCore() {
       final reader = ConstantReader(annotation);
       final hasChecker = reader.read('hasChecker').literalValue as bool?;
       final hasWhen = reader.read('hasWhen').literalValue as bool?;
@@ -116,7 +113,7 @@ class EnumPatternMatchingCodeGenerator {
       final hasMaybeWhen = reader.read('hasMaybeWhen').literalValue as bool?;
       final hasMaybeMap = reader.read('hasMaybeMap').literalValue as bool?;
 
-      return SteroidsEnum(
+      return EnumExtension(
         hasChecker: hasChecker ?? true,
         hasWhen: hasWhen ?? true,
         hasMap: hasMap ?? true,
@@ -125,7 +122,7 @@ class EnumPatternMatchingCodeGenerator {
       );
     }
 
-    return (annotation != null) ? getCore() : const SteroidsEnum();
+    return (annotation != null) ? getCore() : const EnumExtension();
   }
 
   // ignore: avoid_positional_boolean_parameters
@@ -175,7 +172,6 @@ class EnumPatternMatchingCodeGenerator {
   Method get generateMapMethod {
     final bodyBuffer = StringBuffer()
       ..writeln()
-
       ..writeln('return switch(this) {');
     for (final field in fields) {
       bodyBuffer.writeln('${element.name}.${field.name} => ${field.name}(this),');
@@ -257,7 +253,6 @@ class EnumPatternMatchingCodeGenerator {
         ..build(),
     );
   }
-
 
   Method get generateMayBeWhenMethod {
     final bodyBuffer = StringBuffer()
