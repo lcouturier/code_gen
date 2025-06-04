@@ -5,7 +5,7 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:example/form_factor.dart';
+import 'package:example/core/form_factor.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -15,15 +15,27 @@ void main() {
     expect(result, 'virtual');
   });
 
-  test('whenOrNull 1', () {
+  test('map 1', () {
+    FormFactor value = FormFactor.virtual;
+    final result = value.map(plastic: (e) => e.toString(), virtual: (e) => e.toString());
+    expect(result, 'FormFactor.virtual');
+  });
+
+  test('mayBeWhen 1', () {
     FormFactor value = FormFactor.plastic;
-    final result = value.whenOrElse(plastic: () => 'plastic', orElse: () => "default");
+    final result = value.mayBeWhen(plastic: () => 'plastic', orElse: () => "default");
     expect(result, 'plastic');
   });
 
-  test('whenOrNull 1', () {
+  test('mayBeMap 1', () {
+    FormFactor value = FormFactor.plastic;
+    final result = value.mayBeMap(plastic: (e) => e.toString(), orElse: () => "default");
+    expect(result, 'FormFactor.plastic');
+  });
+
+  test('mayBeWhen 2', () {
     FormFactor value = FormFactor.virtual;
-    final result = value.whenOrElse(plastic: () => 'plastic', orElse: () => "default");
+    final result = value.mayBeWhen(plastic: () => 'plastic', orElse: () => "default");
     expect(result, 'default');
   });
 }

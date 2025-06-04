@@ -5,22 +5,26 @@ homepage:
 publish_to: none
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.0.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  build:
-  source_gen:
   annotations:
     path: ../annotations/
+  flutter:
+    sdk: flutter
+  meta: ^1.9.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^2.0.0
-  build_runner:   
+  build_runner: any
+  build_runner_core: ^8.0.0
+  source_gen: ^2.0.0
+  analyzer: ^7.4.5
+  flutter_lints: ^5.0.0
+  
+  
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
