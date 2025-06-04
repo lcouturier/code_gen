@@ -2,7 +2,7 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 
-// ignore_for_file: implementation_imports, avoid_positional_boolean_parameters, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, missing_whitespace_between_adjacent_strings
+// ignore_for_file: implementation_imports, avoid_positional_boolean_parameters, prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, missing_whitespace_between_adjacent_strings, deprecated_member_use
 
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/src/builder/build_step.dart';
@@ -59,7 +59,8 @@ class UnnitTestGenerator extends Generator {
         ..body = getCode(element);
 
       final emitter = DartEmitter();
-      return DartFormatter().format('${mainMethod.build().accept(emitter)}');
+      return DartFormatter(languageVersion: DartFormatter.latestLanguageVersion)
+          .format('${mainMethod.build().accept(emitter)}');
     }
 
     return '';

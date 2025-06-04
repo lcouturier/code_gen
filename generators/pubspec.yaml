@@ -16,7 +16,6 @@ dependencies:
   meta: ^1.9.1
 
 dev_dependencies:
-  build_runner:
   flutter_test:
     sdk: flutter
   build_runner: any
